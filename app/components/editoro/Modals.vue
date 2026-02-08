@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { CreateTargetType } from '~/types/editoro'
+
 const { t } = useI18n()
 
 const props = defineProps<{

@@ -29,6 +29,7 @@ export type SelectOption = {
   label: string
   value: string
 }
+export type Translator = (key: string, params?: Record<string, unknown>) => string
 
 export type EditorToolbarItems = EditorToolbarItem[][]
 export type EditorSuggestionItems = EditorSuggestionMenuItem[][]

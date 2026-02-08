@@ -16,7 +16,8 @@ export function getFileExtension(path: string) {
     return ''
   }
 
-  return parts[parts.length - 1].toLowerCase()
+  const extension = parts[parts.length - 1]
+  return extension ? extension.toLowerCase() : ''
 }
 
 export function isMarkdownPath(path: string) {

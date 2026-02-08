@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { SaveStatusColor } from '~/types/editoro'
+
 const { t } = useI18n()
 
 const props = defineProps<{

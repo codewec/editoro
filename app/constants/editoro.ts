@@ -1,6 +1,4 @@
-import type { EditorSuggestionItems, EditorToolbarItems } from '~/types/editoro'
-
-type Translator = (key: string, params?: Record<string, unknown>) => string
+import type { EditorSuggestionItems, EditorToolbarItems, Translator } from '~/types/editoro'
 
 export function createEditorToolbarItems(t: Translator) {
   return [
@@ -28,7 +26,7 @@ export function createEditorToolbarItems(t: Translator) {
       { kind: 'horizontalRule', icon: 'i-lucide-minus', tooltip: { text: t('toolbar.divider') } }
     ],
     [
-      { kind: 'uploadImage', icon: 'i-lucide-image-plus', tooltip: { text: t('toolbar.uploadImage') }, 'aria-label': t('toolbar.uploadImage') }
+      { 'kind': 'uploadImage', 'icon': 'i-lucide-image-plus', 'tooltip': { text: t('toolbar.uploadImage') }, 'aria-label': t('toolbar.uploadImage') }
     ]
   ] satisfies EditorToolbarItems
 }

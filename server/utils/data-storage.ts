@@ -322,7 +322,7 @@ export async function deleteEntry(relativePath: string) {
 function sanitizeFileName(input: string) {
   const normalized = input
     .normalize('NFKD')
-    .replace(/[^\w.\-]+/g, '-')
+    .replace(/[^\w.-]+/g, '-')
     .replace(/-+/g, '-')
     .replace(/^[-.]+|[-.]+$/g, '')
 

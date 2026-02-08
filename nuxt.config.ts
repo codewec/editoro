@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
     '@nuxt/ui',
+    '@pinia/nuxt',
     '@nuxtjs/i18n'
   ],
 
@@ -24,9 +25,9 @@ export default defineNuxtConfig({
   },
 
   i18n: {
+    baseUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
     strategy: 'no_prefix',
     defaultLocale: 'en',
-    lazy: false,
     langDir: 'locales',
     vueI18n: './i18n.config.ts',
     locales: [

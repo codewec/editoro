@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { ColorModePreference, CreateTargetType, SelectOption, TreeNode } from '~/types/editoro'
-import { findNodeByPath } from '~/utils/editoro-path'
+import { useEditoroSidebarDnDHandlers } from '~/composables/workspace/useEditoroSidebarDnDHandlers'
+import { getTreeNodeIcon } from '~/utils/editoro-tree'
+
 const { t } = useI18n()
 
 const props = defineProps<{
@@ -40,47 +42,19 @@ const emit = defineEmits<{
 }>()
 
 function getIconName(item: TreeNode, expanded: boolean) {
-  if (item.icon) {
-    return item.icon
-  }
-
-  if (item.type === 'directory') {
-    return expanded ? 'i-lucide-folder-open' : 'i-lucide-folder'
-  }
-
-  return 'i-lucide-file'
+  return getTreeNodeIcon(item, expanded)
 }
 
-function getItemByPath(path: string) {
-  return findNodeByPath(props.treeItems, path)
-}
-
-function emitDragStart(path: string, event: DragEvent) {
-  const item = getItemByPath(path)
-  if (!item) {
-    return
-  }
-
-  emit('treeDragStart', item, event)
-}
-
-function emitDragOver(path: string, event: DragEvent) {
-  const item = getItemByPath(path)
-  if (!item) {
-    return
-  }
-
-  emit('treeDragOver', item, event)
-}
-
-function emitDrop(path: string, event: DragEvent) {
-  const item = getItemByPath(path)
-  if (!item) {
-    return
-  }
-
-  emit('treeDrop', item, event)
-}
+const {
+  emitDragStart,
+  emitDragOver,
+  emitDrop
+} = useEditoroSidebarDnDHandlers({
+  getTreeItems: () => props.treeItems,
+  onDragStart: (item, event) => emit('treeDragStart', item, event),
+  onDragOver: (item, event) => emit('treeDragOver', item, event),
+  onDrop: (item, event) => emit('treeDrop', item, event)
+})
 </script>
 
 <template>

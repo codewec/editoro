@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { DirectoryTreeNode, EditorSuggestionItems, EditorToolbarItems, EditorViewMode, TreeNode, TreeNodeType } from '~/types/editoro'
 import { useEditoroMainContentMedia } from '~/composables/editor/useEditoroMainContentMedia'
 
@@ -28,6 +29,16 @@ const emit = defineEmits<{
   selectPath: [path: string]
   goParent: []
 }>()
+
+// Keep editor fallback in loading state during client-only initialization.
+const isMarkdownFileSelected = computed(() => {
+  if (props.selectedNodeType !== 'file') {
+    return false
+  }
+
+  const extension = props.selectedFileExtension.toLowerCase()
+  return extension === 'md' || extension === 'markdown'
+})
 
 const {
   imageInputRef,
@@ -112,7 +123,7 @@ const {
       />
     </div>
 
-    <ClientOnly v-else-if="props.canUploadImage">
+    <ClientOnly v-else-if="isMarkdownFileSelected">
       <template #fallback>
         <div class="editoro-loading-state">
           <UIcon

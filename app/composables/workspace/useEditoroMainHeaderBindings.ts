@@ -8,9 +8,6 @@ import type { EditoroState } from '~/composables/workspace/types'
 export function useEditoroMainHeaderBindings(state: EditoroState) {
   const mainHeaderProps = computed(() => ({
     showExpandSidebarButton: unref(state.ui.isSidebarCollapsed),
-    editorModeLabel: state.editor.modeLabel.value,
-    editorModeIcon: state.editor.modeIcon.value,
-    editorModeTooltip: state.editor.modeTooltip.value,
     headerBadges: state.view.headerBadges.value,
     canRenameOrDelete: state.view.canRenameOrDelete.value,
     isSaving: state.editor.isSaving.value,
@@ -21,7 +18,6 @@ export function useEditoroMainHeaderBindings(state: EditoroState) {
 
   const mainHeaderHandlers = {
     expandSidebar: state.ui.expandSidebar,
-    toggleMode: state.editor.toggleMode,
     selectBadge: (path: string) => {
       if (!path) {
         return

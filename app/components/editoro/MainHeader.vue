@@ -5,9 +5,6 @@ const { t } = useI18n()
 
 const props = defineProps<{
   showExpandSidebarButton: boolean
-  editorModeLabel: string
-  editorModeIcon: string
-  editorModeTooltip: string
   headerBadges: EditorPinnedBadge[]
   canRenameOrDelete: boolean
   isSaving: boolean
@@ -18,7 +15,6 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   expandSidebar: []
-  toggleMode: []
   selectBadge: [path: string]
   togglePin: [path: string]
   rename: []
@@ -36,13 +32,6 @@ const emit = defineEmits<{
       icon="i-lucide-panel-left-open"
       :aria-label="t('sidebar.expand')"
       @click="emit('expandSidebar')"
-    />
-
-    <EditoroHeaderModeToggle
-      :label="props.editorModeLabel"
-      :icon="props.editorModeIcon"
-      :tooltip="props.editorModeTooltip"
-      @toggle="emit('toggleMode')"
     />
 
     <EditoroHeaderPinnedBadges

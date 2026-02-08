@@ -63,7 +63,6 @@ const {
         v-bind="mainHeaderProps"
         :show-expand-sidebar-button="editoro.ui.isSidebarCollapsed.value"
         @expand-sidebar="mainHeaderHandlers.expandSidebar"
-        @toggle-mode="mainHeaderHandlers.toggleMode"
         @select-badge="mainHeaderHandlers.selectBadge"
         @toggle-pin="mainHeaderHandlers.togglePin"
         @rename="mainHeaderHandlers.rename"
@@ -72,6 +71,7 @@ const {
 
       <EditoroMainContent
         v-bind="mainContentProps"
+        @toggle-mode="mainContentHandlers.toggleMode"
         @update-editor-content="mainContentHandlers.updateEditorContent"
         @select-path="mainContentHandlers.selectPath"
         @go-parent="mainContentHandlers.goParent"

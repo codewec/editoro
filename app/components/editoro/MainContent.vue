@@ -25,6 +25,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
+  toggleMode: []
   updateEditorContent: [value: string]
   selectPath: [path: string]
   goParent: []
@@ -49,6 +50,18 @@ const {
   canUploadImage: () => props.canUploadImage,
   uploadImage: props.uploadImage
 })
+
+const richEditorHandlers = computed(() => ({
+  ...editorHandlers,
+  toggleRawMode: {
+    canExecute: () => true,
+    execute: () => {
+      emit('toggleMode')
+      return true
+    },
+    isActive: () => false
+  }
+}))
 </script>
 
 <template>
@@ -134,22 +147,40 @@ const {
         </div>
       </template>
 
-      <UTextarea
+      <div
         v-if="props.editorViewMode === 'raw'"
-        :model-value="props.editorContent"
-        :rows="30"
-        :autoresize="false"
-        class="editoro-raw"
-        :placeholder="t('main.rawPlaceholder')"
-        @update:model-value="emit('updateEditorContent', String($event || ''))"
-      />
+        class="editoro-raw-wrap"
+      >
+        <div class="editoro-raw-switch-wrap">
+          <UButton
+            size="xs"
+            color="neutral"
+            variant="soft"
+            class="editoro-raw-switch"
+            icon="i-lucide-square-pen"
+            :aria-label="t('editorMode.toRich')"
+            @click="emit('toggleMode')"
+          >
+            {{ t('editorMode.rich') }}
+          </UButton>
+        </div>
+
+        <UTextarea
+          :model-value="props.editorContent"
+          :rows="30"
+          :autoresize="false"
+          class="editoro-raw"
+          :placeholder="t('main.rawPlaceholder')"
+          @update:model-value="emit('updateEditorContent', String($event || ''))"
+        />
+      </div>
 
       <UEditor
         v-else
         :model-value="props.editorContent"
         class="editoro-editor"
         content-type="markdown"
-        :handlers="editorHandlers"
+        :handlers="richEditorHandlers"
         :placeholder="t('main.editorPlaceholder')"
         @update:model-value="emit('updateEditorContent', String($event || ''))"
       >
@@ -278,8 +309,23 @@ const {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
+.editoro-raw-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.editoro-raw-switch-wrap {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  z-index: 10;
+}
+
 .editoro-raw :deep(textarea) {
   height: 100%;
+  padding-right: 6.25rem;
 }
 
 .editoro-toolbar {

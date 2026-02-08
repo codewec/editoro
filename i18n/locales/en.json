@@ -79,6 +79,7 @@
     "quote": "Quote",
     "codeBlock": "Code block",
     "divider": "Divider",
+    "raw": "Open raw editor",
     "uploadImage": "Upload image"
   },
   "suggestion": {

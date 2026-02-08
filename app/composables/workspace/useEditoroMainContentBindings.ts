@@ -27,6 +27,7 @@ export function useEditoroMainContentBindings(options: WorkspaceBindingOptions) 
   }))
 
   const mainContentHandlers = {
+    toggleMode: state.editor.toggleMode,
     updateEditorContent: (value: string) => {
       state.editor.content.value = value
     },

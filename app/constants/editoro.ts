@@ -26,6 +26,9 @@ export function createEditorToolbarItems(t: Translator) {
       { kind: 'horizontalRule', icon: 'i-lucide-minus', tooltip: { text: t('toolbar.divider') } }
     ],
     [
+      { kind: 'toggleRawMode', icon: 'i-lucide-file-text', label: 'Raw', tooltip: { text: t('toolbar.raw') }, 'aria-label': t('toolbar.raw') }
+    ],
+    [
       { 'kind': 'uploadImage', 'icon': 'i-lucide-image-plus', 'tooltip': { text: t('toolbar.uploadImage') }, 'aria-label': t('toolbar.uploadImage') }
     ]
   ] satisfies EditorToolbarItems

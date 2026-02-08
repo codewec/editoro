@@ -1,0 +1,124 @@
+{
+  "app": {
+    "title": "Editoro",
+    "description": "Local markdown editor built with Nuxt UI"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "rename": "Rename"
+  },
+  "sidebar": {
+    "refresh": "Refresh",
+    "showHidden": "Show hidden",
+    "hideHidden": "Hide hidden",
+    "createFile": "Create file",
+    "createFolder": "Create folder",
+    "loadingTree": "Loading tree...",
+    "moveToRoot": "Drop here to move to root",
+    "settings": "Settings"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "colorMode": "Color scheme",
+    "close": "Close",
+    "ru": "Русский",
+    "en": "English",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "main": {
+    "root": "Root",
+    "loadingData": "Loading data...",
+    "loadingFile": "Loading file...",
+    "loadingEditor": "Preparing editor...",
+    "goUp": "Go up",
+    "toRoot": "To root",
+    "folderEmpty": "Folder is empty",
+    "rootEmpty": "No files or folders in root",
+    "imagePreviewError": "Failed to prepare image preview",
+    "unsupportedFormat": "File format is not supported for editing",
+    "selectedFormat": "Selected format: .{ext}",
+    "rawPlaceholder": "Raw markdown text...",
+    "editorPlaceholder": "Start writing...",
+    "saveStatus": "Save status",
+    "rename": "Rename",
+    "remove": "Delete"
+  },
+  "modals": {
+    "createPathHintTitle": "How to create in root",
+    "createPathHintDescription": "Start with /, for example: /docs or /todo.md",
+    "createPathPreviewTitle": "Will be created at",
+    "createDescription": "Enter name or relative path",
+    "renameDescription": "Enter new name",
+    "renameLabel": "New name",
+    "deleteIrreversible": "This action cannot be undone",
+    "deleteIrreversibleDescription": "File or folder will be removed completely"
+  },
+  "toolbar": {
+    "undo": "Undo",
+    "redo": "Redo",
+    "bold": "Bold",
+    "italic": "Italic",
+    "strike": "Strike",
+    "code": "Code",
+    "h1": "Heading 1",
+    "h2": "Heading 2",
+    "h3": "Heading 3",
+    "paragraph": "Paragraph",
+    "bulletList": "Bullet list",
+    "orderedList": "Ordered list",
+    "quote": "Quote",
+    "codeBlock": "Code block",
+    "divider": "Divider",
+    "uploadImage": "Upload image"
+  },
+  "suggestion": {
+    "text": "Text",
+    "lists": "Lists",
+    "insert": "Insert",
+    "heading1": "Heading 1",
+    "heading2": "Heading 2",
+    "heading3": "Heading 3",
+    "image": "Image"
+  },
+  "editorMode": {
+    "rich": "Rich",
+    "raw": "Raw",
+    "toRich": "Switch to Rich mode",
+    "toRaw": "Switch to Raw mode"
+  },
+  "save": {
+    "inProgress": "Saving...",
+    "error": "Save error",
+    "success": "Changes saved",
+    "lastSaved": "Last saved: {time}"
+  },
+  "titles": {
+    "createFile": "Create file",
+    "createFolder": "Create folder",
+    "createFileLabel": "File name or path",
+    "createFolderLabel": "Folder name or path",
+    "renameFolder": "Rename folder",
+    "renameFile": "Rename file",
+    "deleteFolder": "Delete folder?",
+    "deleteFile": "Delete file?"
+  },
+  "errors": {
+    "loadTree": "Failed to load file tree",
+    "openFile": "Failed to open file",
+    "saveFile": "Failed to save file",
+    "createEntry": "Failed to create entry",
+    "rename": "Failed to rename",
+    "delete": "Failed to delete",
+    "move": "Failed to move",
+    "uploadImage": "Failed to upload image",
+    "openMarkdownFirst": "Open a markdown file first",
+    "specifyName": "Specify a name",
+    "emptyName": "Name cannot be empty",
+    "emptyFileName": "File name cannot be empty",
+    "specifyFileOrFolder": "Specify file or folder name"
+  }
+}

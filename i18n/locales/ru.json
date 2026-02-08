@@ -1,0 +1,124 @@
+{
+  "app": {
+    "title": "Editoro",
+    "description": "Локальный markdown-редактор на Nuxt UI"
+  },
+  "common": {
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "rename": "Переименовать"
+  },
+  "sidebar": {
+    "refresh": "Обновить",
+    "showHidden": "Показать скрытые",
+    "hideHidden": "Скрыть скрытые",
+    "createFile": "Создать файл",
+    "createFolder": "Создать папку",
+    "loadingTree": "Загрузка дерева...",
+    "moveToRoot": "Перетащите сюда для перемещения в корень",
+    "settings": "Настройки"
+  },
+  "settings": {
+    "title": "Настройки",
+    "language": "Язык",
+    "colorMode": "Цветовая схема",
+    "close": "Закрыть",
+    "ru": "Русский",
+    "en": "English",
+    "light": "Светлая",
+    "dark": "Темная",
+    "system": "Системная"
+  },
+  "main": {
+    "root": "Корень",
+    "loadingData": "Загрузка данных...",
+    "loadingFile": "Загрузка файла...",
+    "loadingEditor": "Подготовка редактора...",
+    "goUp": "На уровень выше",
+    "toRoot": "К корню",
+    "folderEmpty": "Папка пуста",
+    "rootEmpty": "В корне нет файлов и папок",
+    "imagePreviewError": "Не удалось подготовить предпросмотр изображения",
+    "unsupportedFormat": "Формат файла не поддерживается для редактирования",
+    "selectedFormat": "Выбранный формат: .{ext}",
+    "rawPlaceholder": "Сырой markdown-текст...",
+    "editorPlaceholder": "Начните писать...",
+    "saveStatus": "Статус сохранения",
+    "rename": "Переименовать",
+    "remove": "Удалить"
+  },
+  "modals": {
+    "createPathHintTitle": "Как создать в корне",
+    "createPathHintDescription": "Начните путь с /, например: /docs или /todo.md",
+    "createPathPreviewTitle": "Будет создано по пути",
+    "createDescription": "Введите имя или относительный путь",
+    "renameDescription": "Введите новое имя",
+    "renameLabel": "Новое имя",
+    "deleteIrreversible": "Действие необратимо",
+    "deleteIrreversibleDescription": "Файл или папка будут удалены полностью"
+  },
+  "toolbar": {
+    "undo": "Отменить",
+    "redo": "Повторить",
+    "bold": "Жирный",
+    "italic": "Курсив",
+    "strike": "Зачеркнутый",
+    "code": "Код",
+    "h1": "Заголовок 1",
+    "h2": "Заголовок 2",
+    "h3": "Заголовок 3",
+    "paragraph": "Параграф",
+    "bulletList": "Маркированный список",
+    "orderedList": "Нумерованный список",
+    "quote": "Цитата",
+    "codeBlock": "Блок кода",
+    "divider": "Разделитель",
+    "uploadImage": "Загрузить изображение"
+  },
+  "suggestion": {
+    "text": "Текст",
+    "lists": "Списки",
+    "insert": "Вставка",
+    "heading1": "Заголовок 1",
+    "heading2": "Заголовок 2",
+    "heading3": "Заголовок 3",
+    "image": "Изображение"
+  },
+  "editorMode": {
+    "rich": "Rich",
+    "raw": "Raw",
+    "toRich": "Переключить в Rich режим",
+    "toRaw": "Переключить в Raw режим"
+  },
+  "save": {
+    "inProgress": "Идет сохранение...",
+    "error": "Ошибка сохранения",
+    "success": "Изменения сохранены",
+    "lastSaved": "Последнее сохранение: {time}"
+  },
+  "titles": {
+    "createFile": "Создать файл",
+    "createFolder": "Создать папку",
+    "createFileLabel": "Имя файла или путь",
+    "createFolderLabel": "Имя папки или путь",
+    "renameFolder": "Переименовать папку",
+    "renameFile": "Переименовать файл",
+    "deleteFolder": "Удалить папку?",
+    "deleteFile": "Удалить файл?"
+  },
+  "errors": {
+    "loadTree": "Не удалось загрузить дерево файлов",
+    "openFile": "Не удалось открыть файл",
+    "saveFile": "Не удалось сохранить файл",
+    "createEntry": "Не удалось создать элемент",
+    "rename": "Не удалось переименовать",
+    "delete": "Не удалось удалить",
+    "move": "Не удалось переместить",
+    "uploadImage": "Не удалось загрузить изображение",
+    "openMarkdownFirst": "Сначала откройте markdown-файл",
+    "specifyName": "Укажите имя",
+    "emptyName": "Имя не может быть пустым",
+    "emptyFileName": "Имя файла не может быть пустым",
+    "specifyFileOrFolder": "Укажите имя файла или папки"
+  }
+}

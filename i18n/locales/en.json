@@ -44,6 +44,10 @@
     "rawPlaceholder": "Raw markdown text...",
     "editorPlaceholder": "Start writing...",
     "saveStatus": "Save status",
+    "pin": "Pin file",
+    "unpin": "Unpin file",
+    "scrollLeft": "Scroll left",
+    "scrollRight": "Scroll right",
     "rename": "Rename",
     "remove": "Delete"
   },

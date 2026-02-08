@@ -29,6 +29,15 @@ export type SelectOption = {
   label: string
   value: string
 }
+
+export type EditorPinnedBadge = {
+  key: string
+  path: string
+  label: string
+  isCurrent: boolean
+  isPinned: boolean
+  canPin: boolean
+}
 export type Translator = (key: string, params?: Record<string, unknown>) => string
 
 export type EditorToolbarItems = EditorToolbarItem[][]

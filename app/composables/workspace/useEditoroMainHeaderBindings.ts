@@ -6,10 +6,10 @@ import type { EditoroState } from '~/composables/workspace/types'
 
 export function useEditoroMainHeaderBindings(state: EditoroState) {
   const mainHeaderProps = computed(() => ({
-    editorTitle: state.view.editorTitle.value,
     editorModeLabel: state.editor.modeLabel.value,
     editorModeIcon: state.editor.modeIcon.value,
     editorModeTooltip: state.editor.modeTooltip.value,
+    headerBadges: state.view.headerBadges.value,
     canRenameOrDelete: state.view.canRenameOrDelete.value,
     isSaving: state.editor.isSaving.value,
     saveStatusColor: state.editor.saveStatusColor.value,
@@ -19,6 +19,20 @@ export function useEditoroMainHeaderBindings(state: EditoroState) {
 
   const mainHeaderHandlers = {
     toggleMode: state.editor.toggleMode,
+    selectBadge: (path: string) => {
+      if (!path) {
+        return
+      }
+
+      state.tree.selectNodeByPath(path)
+    },
+    togglePin: (path: string) => {
+      if (!path) {
+        return
+      }
+
+      state.editor.togglePinnedFile(path)
+    },
     rename: state.actions.openRenameModal,
     remove: () => {
       state.ui.deleteModalOpen.value = true

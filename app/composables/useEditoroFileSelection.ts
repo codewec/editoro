@@ -75,19 +75,35 @@ export function useEditoroFileSelection(options: FileSelectionOptions) {
   async function initializeFromRouteOnMounted() {
     const filePath = getFileQueryValue()
 
+    async function ensureRouteFileSelected(path: string) {
+      const selected = options.selectedNode.value
+      if (selected?.type === 'file' && selected.path === path) {
+        return true
+      }
+
+      await options.loadTree(path)
+
+      const nextSelected = options.selectedNode.value
+      return nextSelected?.type === 'file' && nextSelected.path === path
+    }
+
     if (!options.treeInitialized.value) {
       await options.loadTree(filePath || undefined)
 
-      if (filePath && (!options.selectedNode.value || options.selectedNode.value.type !== 'file')) {
+      if (filePath && !(await ensureRouteFileSelected(filePath))) {
         await syncRouteWithFile(undefined)
       }
 
       return
     }
 
-    if (filePath && (!options.selectedNode.value || options.selectedNode.value.type !== 'file')) {
-      await syncRouteWithFile(undefined)
-      return
+    if (filePath) {
+      const isOpened = await ensureRouteFileSelected(filePath)
+      if (!isOpened) {
+        await syncRouteWithFile(undefined)
+        options.editorStore.clearEditor()
+        return
+      }
     }
 
     // Hydration case: selected node can already be restored from SSR state,

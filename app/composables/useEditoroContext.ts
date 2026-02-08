@@ -20,6 +20,7 @@ export function useEditoroContext() {
     t,
     selectedNode: treeRefs.selectedNode,
     treeItems: treeRefs.treeItems,
+    pinnedFilePaths: editorRefs.pinnedFilePaths,
     createTargetType: uiRefs.createTargetType,
     createInputPath: uiRefs.createInputPath
   })

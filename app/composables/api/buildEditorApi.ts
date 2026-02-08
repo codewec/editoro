@@ -20,7 +20,13 @@ export function buildEditorApi(options: BuildEditoroApiOptions) {
     modeLabel: editorRefs.editorModeLabel,
     modeIcon: editorRefs.editorModeIcon,
     modeTooltip: editorRefs.editorModeTooltip,
+    pinnedFilePaths: editorRefs.pinnedFilePaths,
     uploadImage: editorStore.uploadImage,
-    toggleMode: editorStore.toggleEditorMode
+    toggleMode: editorStore.toggleEditorMode,
+    isPinned: editorStore.isPinned,
+    pinFile: editorStore.pinFile,
+    unpinFile: editorStore.unpinFile,
+    togglePinnedFile: editorStore.togglePinnedFile,
+    toggleCurrentFilePin: editorStore.toggleCurrentFilePin
   }
 }

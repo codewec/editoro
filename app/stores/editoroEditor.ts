@@ -5,6 +5,7 @@
 import type { EditorViewMode, SaveState } from '~/types/editoro'
 import { useEditoroEditorStatus } from '~/composables/useEditoroEditorStatus'
 import { useEditoroEditorPersistence } from '~/composables/editor/useEditoroEditorPersistence'
+import { useEditoroEditorPins } from '~/composables/editor/useEditoroEditorPins'
 import { useEditoroEditorUploads } from '~/composables/editor/useEditoroEditorUploads'
 
 export const useEditoroEditorStore = defineStore('editoro-editor', () => {
@@ -57,6 +58,10 @@ export const useEditoroEditorStore = defineStore('editoro-editor', () => {
     notifyError
   })
 
+  const pins = useEditoroEditorPins({
+    activeFilePath
+  })
+
   return {
     activeFilePath,
     editorContent,
@@ -71,11 +76,18 @@ export const useEditoroEditorStore = defineStore('editoro-editor', () => {
     editorModeLabel: editorStatus.editorModeLabel,
     editorModeIcon: editorStatus.editorModeIcon,
     editorModeTooltip: editorStatus.editorModeTooltip,
+    pinnedFilePaths: pins.pinnedFilePaths,
     clearEditor: persistence.clearEditor,
     toggleEditorMode,
     loadFile: persistence.loadFile,
     setContent,
     uploadImage: uploads.uploadImage,
-    clearPendingSave: persistence.clearPendingSave
+    clearPendingSave: persistence.clearPendingSave,
+    isPinned: pins.isPinned,
+    pinFile: pins.pinFile,
+    unpinFile: pins.unpinFile,
+    togglePinnedFile: pins.togglePinnedFile,
+    toggleCurrentFilePin: pins.toggleCurrentFilePin,
+    reconcilePinnedFiles: pins.reconcilePinnedFiles
   }
 })

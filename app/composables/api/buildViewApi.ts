@@ -15,6 +15,7 @@ export function buildViewApi(options: BuildEditoroApiOptions) {
     selectedIsImage: viewModel.selectedIsImage,
     selectedImageUrl: viewModel.selectedImageUrl,
     selectedFileExtension: viewModel.selectedFileExtension,
+    headerBadges: viewModel.headerBadges,
     canRenameOrDelete: viewModel.canRenameOrDelete,
     editorTitle: viewModel.editorTitle,
     selectedPath: viewModel.selectedPath,

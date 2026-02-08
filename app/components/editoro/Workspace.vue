@@ -60,6 +60,8 @@ const {
       <EditoroMainHeader
         v-bind="mainHeaderProps"
         @toggle-mode="mainHeaderHandlers.toggleMode"
+        @select-badge="mainHeaderHandlers.selectBadge"
+        @toggle-pin="mainHeaderHandlers.togglePin"
         @rename="mainHeaderHandlers.rename"
         @remove="mainHeaderHandlers.remove"
       />

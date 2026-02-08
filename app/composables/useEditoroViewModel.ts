@@ -3,15 +3,16 @@
  * Used by `app/composables/useEditoroContext.ts`.
  */
 import type { Ref } from 'vue'
-import type { CreateTargetType, DirectoryTreeNode, SelectOption, Translator, TreeNode } from '~/types/editoro'
+import type { CreateTargetType, DirectoryTreeNode, EditorPinnedBadge, SelectOption, Translator, TreeNode } from '~/types/editoro'
 import { buildCreatePathPreview, getSelectedBaseDirectory } from '~/utils/editoro-create'
 import { buildImageUrl, getFileExtension, isImagePath } from '~/utils/editoro-file'
-import { getParentPath } from '~/utils/editoro-path'
+import { findNodeByPath, getBaseName, getParentPath } from '~/utils/editoro-path'
 
 type ViewModelOptions = {
   t: Translator
   selectedNode: Ref<TreeNode | undefined>
   treeItems: Ref<TreeNode[]>
+  pinnedFilePaths: Ref<string[]>
   createTargetType: Ref<CreateTargetType>
   createInputPath: Ref<string>
 }
@@ -56,6 +57,56 @@ export function useEditoroViewModel(options: ViewModelOptions) {
     }
 
     return getFileExtension(options.selectedNode.value.path)
+  })
+
+  const headerBadges = computed<EditorPinnedBadge[]>(() => {
+    const badges: EditorPinnedBadge[] = []
+    const currentNode = options.selectedNode.value
+    const currentPath = currentNode?.type === 'file' ? currentNode.path : ''
+
+    for (const path of options.pinnedFilePaths.value) {
+      const node = findNodeByPath(options.treeItems.value, path)
+      badges.push({
+        key: `pinned:${path}`,
+        path,
+        label: node?.label || getBaseName(path) || path,
+        isCurrent: currentPath === path,
+        isPinned: true,
+        canPin: true
+      })
+    }
+
+    // Show non-pinned current file as the right-most badge.
+    if (currentNode?.type === 'file' && !options.pinnedFilePaths.value.includes(currentNode.path)) {
+      badges.push({
+        key: `current:${currentNode.path}`,
+        path: currentNode.path,
+        label: currentNode.label || getBaseName(currentNode.path) || currentNode.path,
+        isCurrent: true,
+        isPinned: false,
+        canPin: true
+      })
+    } else if (currentNode?.type === 'directory') {
+      badges.push({
+        key: `selected:${currentNode.path}`,
+        path: currentNode.path,
+        label: currentNode.path,
+        isCurrent: true,
+        isPinned: false,
+        canPin: false
+      })
+    } else if (!currentNode) {
+      badges.push({
+        key: 'root',
+        path: '',
+        label: options.t('main.root'),
+        isCurrent: true,
+        isPinned: false,
+        canPin: false
+      })
+    }
+
+    return badges
   })
 
   const createTitle = computed(() => options.createTargetType.value === 'file'
@@ -103,6 +154,7 @@ export function useEditoroViewModel(options: ViewModelOptions) {
     selectedIsImage,
     selectedImageUrl,
     selectedFileExtension,
+    headerBadges,
     createTitle,
     createButtonLabel,
     createInputLabel,

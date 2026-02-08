@@ -56,3 +56,23 @@ export function collectDirectoryPaths(items: TreeNode[]) {
   walk(items)
   return directories
 }
+
+export function collectFilePaths(items: TreeNode[]) {
+  const files = new Set<string>()
+
+  const walk = (nodes: TreeNode[]) => {
+    for (const node of nodes) {
+      if (node.type === 'file') {
+        files.add(node.path)
+        continue
+      }
+
+      if (node.children.length) {
+        walk(node.children)
+      }
+    }
+  }
+
+  walk(items)
+  return files
+}

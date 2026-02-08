@@ -44,6 +44,10 @@
     "rawPlaceholder": "Сырой markdown-текст...",
     "editorPlaceholder": "Начните писать...",
     "saveStatus": "Статус сохранения",
+    "pin": "Закрепить файл",
+    "unpin": "Открепить файл",
+    "scrollLeft": "Прокрутить влево",
+    "scrollRight": "Прокрутить вправо",
     "rename": "Переименовать",
     "remove": "Удалить"
   },

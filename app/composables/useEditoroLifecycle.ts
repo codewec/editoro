@@ -5,6 +5,7 @@
 import type { Ref } from 'vue'
 import type { TreeNode } from '~/types/editoro'
 import { fetchTree } from '~/services/files-api'
+import { collectFilePaths } from '~/utils/editoro-path'
 
 type FileSelectionLike = {
   getFileQueryValue: () => string
@@ -18,6 +19,7 @@ type TreeStoreLike = {
 
 type EditorStoreLike = {
   clearPendingSave: () => void
+  reconcilePinnedFiles: (existingFilePaths: Set<string>) => void
 }
 
 type UiStoreLike = {
@@ -26,6 +28,8 @@ type UiStoreLike = {
 
 type LifecycleOptions = {
   selectedNode: Ref<TreeNode | undefined>
+  treeItems: Ref<TreeNode[]>
+  treeInitialized: Ref<boolean>
   showHiddenEntries: Ref<boolean>
   fileSelection: FileSelectionLike
   treeStore: TreeStoreLike
@@ -34,6 +38,14 @@ type LifecycleOptions = {
 }
 
 export async function useEditoroLifecycle(options: LifecycleOptions) {
+  watch([options.treeItems, options.treeInitialized], ([items, initialized]) => {
+    if (!initialized) {
+      return
+    }
+
+    options.editorStore.reconcilePinnedFiles(collectFilePaths(items))
+  }, { immediate: true })
+
   watch(options.selectedNode, async (node) => {
     await options.fileSelection.handleSelectedNodeChange(node)
   })

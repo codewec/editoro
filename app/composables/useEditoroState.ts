@@ -13,6 +13,8 @@ export async function useEditoroState() {
 
   await useEditoroLifecycle({
     selectedNode: treeRefs.selectedNode,
+    treeItems: treeRefs.treeItems,
+    treeInitialized: treeRefs.treeInitialized,
     showHiddenEntries: preferencesRefs.showHiddenEntries,
     fileSelection,
     treeStore,

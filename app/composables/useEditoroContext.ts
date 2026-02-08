@@ -42,6 +42,9 @@ export function useEditoroContext() {
   const fileSelection = useEditoroFileSelection({
     selectedNode: treeRefs.selectedNode,
     activeFilePath: editorRefs.activeFilePath,
+    pinnedFilePaths: editorRefs.pinnedFilePaths,
+    showHiddenEntries: refs.preferencesRefs.showHiddenEntries,
+    setShowHiddenEntries: preferencesStore.setShowHiddenEntries,
     treeInitialized: treeRefs.treeInitialized,
     editorStore,
     loadTree
@@ -72,7 +75,8 @@ export function useEditoroContext() {
     entryActions,
     actions: {
       refreshTree: treeActions.refreshTree,
-      toggleShowHiddenEntries: treeActions.toggleShowHiddenEntries
+      toggleShowHiddenEntries: treeActions.toggleShowHiddenEntries,
+      openPath: fileSelection.openPath
     }
   }
 }

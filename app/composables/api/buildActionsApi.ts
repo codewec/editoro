@@ -10,6 +10,7 @@ export function buildActionsApi(options: BuildEditoroApiOptions) {
 
   return {
     openCreateModal: uiStore.openCreateModal,
+    openPath: options.actions.openPath,
     createEntry: entryActions.createEntry,
     openRenameModal: entryActions.openRenameModal,
     renameSelectedEntry: entryActions.renameSelectedEntry,

@@ -5,6 +5,7 @@
 import type { Ref } from 'vue'
 import type { TreeNode } from '~/types/editoro'
 import { isImagePath, isMarkdownPath } from '~/utils/editoro-file'
+import { hasHiddenPathSegment } from '~/utils/editoro-path'
 
 type EditorStoreLike = {
   clearEditor: () => void
@@ -14,6 +15,9 @@ type EditorStoreLike = {
 type FileSelectionOptions = {
   selectedNode: Ref<TreeNode | undefined>
   activeFilePath: Ref<string>
+  pinnedFilePaths: Ref<string[]>
+  showHiddenEntries: Ref<boolean>
+  setShowHiddenEntries: (nextValue: boolean) => void
   treeInitialized: Ref<boolean>
   editorStore: EditorStoreLike
   loadTree: (preferPath?: string) => Promise<void>
@@ -34,6 +38,27 @@ export function useEditoroFileSelection(options: FileSelectionOptions) {
     }
 
     return ''
+  }
+
+  function getPinnedFallbackPath() {
+    return options.pinnedFilePaths.value[0] || ''
+  }
+
+  function getInitialPreferredPath() {
+    return getFileQueryValue() || getPinnedFallbackPath()
+  }
+
+  async function openPath(path: string) {
+    if (!path) {
+      return false
+    }
+
+    if (hasHiddenPathSegment(path) && !options.showHiddenEntries.value) {
+      options.setShowHiddenEntries(true)
+    }
+
+    await options.loadTree(path)
+    return options.selectedNode.value?.path === path
   }
 
   async function syncRouteWithFile(filePath?: string) {
@@ -74,23 +99,21 @@ export function useEditoroFileSelection(options: FileSelectionOptions) {
 
   async function initializeFromRouteOnMounted() {
     const filePath = getFileQueryValue()
+    const preferredPath = getInitialPreferredPath()
 
-    async function ensureRouteFileSelected(path: string) {
+    async function ensurePathSelected(path: string) {
       const selected = options.selectedNode.value
-      if (selected?.type === 'file' && selected.path === path) {
+      if (selected?.path === path) {
         return true
       }
 
-      await options.loadTree(path)
-
-      const nextSelected = options.selectedNode.value
-      return nextSelected?.type === 'file' && nextSelected.path === path
+      return await openPath(path)
     }
 
     if (!options.treeInitialized.value) {
-      await options.loadTree(filePath || undefined)
+      await options.loadTree(preferredPath || undefined)
 
-      if (filePath && !(await ensureRouteFileSelected(filePath))) {
+      if (filePath && !(await ensurePathSelected(filePath))) {
         await syncRouteWithFile(undefined)
       }
 
@@ -98,12 +121,14 @@ export function useEditoroFileSelection(options: FileSelectionOptions) {
     }
 
     if (filePath) {
-      const isOpened = await ensureRouteFileSelected(filePath)
+      const isOpened = await ensurePathSelected(filePath)
       if (!isOpened) {
         await syncRouteWithFile(undefined)
         options.editorStore.clearEditor()
         return
       }
+    } else if (preferredPath) {
+      await ensurePathSelected(preferredPath)
     }
 
     // Hydration case: selected node can already be restored from SSR state,
@@ -126,6 +151,8 @@ export function useEditoroFileSelection(options: FileSelectionOptions) {
 
   return {
     getFileQueryValue,
+    getInitialPreferredPath,
+    openPath,
     syncRouteWithFile,
     handleSelectedNodeChange,
     initializeFromRouteOnMounted

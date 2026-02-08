@@ -27,7 +27,7 @@ export function useEditoroMainHeaderBindings(state: EditoroState) {
         return
       }
 
-      state.tree.selectNodeByPath(path)
+      void state.actions.openPath(path)
     },
     togglePin: (path: string) => {
       if (!path) {

@@ -76,3 +76,24 @@ export function collectFilePaths(items: TreeNode[]) {
   walk(items)
   return files
 }
+
+export function collectNodePaths(items: TreeNode[]) {
+  const nodes = new Set<string>()
+
+  const walk = (entries: TreeNode[]) => {
+    for (const entry of entries) {
+      nodes.add(entry.path)
+
+      if (entry.type === 'directory' && entry.children.length) {
+        walk(entry.children)
+      }
+    }
+  }
+
+  walk(items)
+  return nodes
+}
+
+export function hasHiddenPathSegment(path: string) {
+  return path.split('/').some(segment => segment.startsWith('.'))
+}

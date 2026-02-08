@@ -6,7 +6,7 @@ type EditoroEditorPinsOptions = {
 
 const PINNED_FILES_COOKIE_KEY = 'editoro.pinned-files'
 
-function parsePinnedFilePaths(raw: string | undefined) {
+function parsePinnedFilePaths(raw: unknown) {
   if (!raw) {
     return []
   }
@@ -35,6 +35,10 @@ function parsePinnedFilePaths(raw: string | undefined) {
 
 function areSamePaths(left: string[], right: string[]) {
   return left.length === right.length && left.every((value, index) => value === right[index])
+}
+
+function hasHiddenSegment(path: string) {
+  return path.split('/').some(segment => segment.startsWith('.'))
 }
 
 /**
@@ -105,8 +109,15 @@ export function useEditoroEditorPins(options: EditoroEditorPinsOptions) {
     togglePinnedFile(options.activeFilePath.value)
   }
 
-  function reconcilePinnedFiles(existingFilePaths: Set<string>) {
-    const nextPaths = pinnedFilePaths.value.filter(path => existingFilePaths.has(path))
+  function reconcilePinnedFiles(existingFilePaths: Set<string>, preserveHiddenPaths = false) {
+    const nextPaths = pinnedFilePaths.value.filter((path) => {
+      if (existingFilePaths.has(path)) {
+        return true
+      }
+
+      return preserveHiddenPaths && hasHiddenSegment(path)
+    })
+
     if (nextPaths.length === pinnedFilePaths.value.length) {
       return
     }

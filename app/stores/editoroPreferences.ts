@@ -49,6 +49,10 @@ export const useEditoroPreferencesStore = defineStore('editoro-preferences', () 
     showHiddenEntries.value = !showHiddenEntries.value
   }
 
+  function setShowHiddenEntries(nextValue: boolean) {
+    showHiddenEntries.value = !!nextValue
+  }
+
   function openSettingsModal() {
     settingsLocale.value = locale.value
     settingsColorMode.value = (colorMode.preference as ColorModePreference) || 'system'
@@ -99,6 +103,7 @@ export const useEditoroPreferencesStore = defineStore('editoro-preferences', () 
     settingsColorMode,
     initialize,
     toggleShowHiddenEntries,
+    setShowHiddenEntries,
     openSettingsModal,
     closeSettingsModal,
     setLocalePreference,

@@ -62,7 +62,7 @@ export function useEditoroViewModel(options: ViewModelOptions) {
   const headerBadges = computed<EditorPinnedBadge[]>(() => {
     const badges: EditorPinnedBadge[] = []
     const currentNode = options.selectedNode.value
-    const currentPath = currentNode?.type === 'file' ? currentNode.path : ''
+    const currentPath = currentNode?.path || ''
 
     for (const path of options.pinnedFilePaths.value) {
       const node = findNodeByPath(options.treeItems.value, path)
@@ -76,24 +76,17 @@ export function useEditoroViewModel(options: ViewModelOptions) {
       })
     }
 
-    // Show non-pinned current file as the right-most badge.
-    if (currentNode?.type === 'file' && !options.pinnedFilePaths.value.includes(currentNode.path)) {
+    // Show non-pinned selected node as the right-most badge.
+    if (currentNode && !options.pinnedFilePaths.value.includes(currentNode.path)) {
       badges.push({
         key: `current:${currentNode.path}`,
         path: currentNode.path,
-        label: currentNode.label || getBaseName(currentNode.path) || currentNode.path,
+        label: currentNode.type === 'directory'
+          ? currentNode.path
+          : (currentNode.label || getBaseName(currentNode.path) || currentNode.path),
         isCurrent: true,
         isPinned: false,
         canPin: true
-      })
-    } else if (currentNode?.type === 'directory') {
-      badges.push({
-        key: `selected:${currentNode.path}`,
-        path: currentNode.path,
-        label: currentNode.path,
-        isCurrent: true,
-        isPinned: false,
-        canPin: false
       })
     } else if (!currentNode) {
       badges.push({

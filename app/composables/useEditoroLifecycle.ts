@@ -5,10 +5,11 @@
 import type { Ref } from 'vue'
 import type { TreeNode } from '~/types/editoro'
 import { fetchTree } from '~/services/files-api'
-import { collectFilePaths } from '~/utils/editoro-path'
+import { collectNodePaths } from '~/utils/editoro-path'
 
 type FileSelectionLike = {
   getFileQueryValue: () => string
+  getInitialPreferredPath: () => string
   handleSelectedNodeChange: (node?: TreeNode) => Promise<void>
   initializeFromRouteOnMounted: () => Promise<void>
 }
@@ -19,7 +20,7 @@ type TreeStoreLike = {
 
 type EditorStoreLike = {
   clearPendingSave: () => void
-  reconcilePinnedFiles: (existingFilePaths: Set<string>) => void
+  reconcilePinnedFiles: (existingFilePaths: Set<string>, preserveHiddenPaths?: boolean) => void
 }
 
 type UiStoreLike = {
@@ -38,13 +39,21 @@ type LifecycleOptions = {
 }
 
 export async function useEditoroLifecycle(options: LifecycleOptions) {
-  watch([options.treeItems, options.treeInitialized], ([items, initialized]) => {
+  const reconcilePinnedEntries = (items: TreeNode[], initialized: boolean) => {
     if (!initialized) {
       return
     }
 
-    options.editorStore.reconcilePinnedFiles(collectFilePaths(items))
-  }, { immediate: true })
+    options.editorStore.reconcilePinnedFiles(
+      collectNodePaths(items),
+      !options.showHiddenEntries.value
+    )
+  }
+
+  // Reconcile only on client/after setup to avoid hydration mismatch.
+  watch([options.treeItems, options.treeInitialized], ([items, initialized]) => {
+    reconcilePinnedEntries(items, initialized)
+  }, { flush: 'post' })
 
   watch(options.selectedNode, async (node) => {
     await options.fileSelection.handleSelectedNodeChange(node)
@@ -57,15 +66,16 @@ export async function useEditoroLifecycle(options: LifecycleOptions) {
 
   onMounted(async () => {
     await options.fileSelection.initializeFromRouteOnMounted()
+    reconcilePinnedEntries(options.treeItems.value, options.treeInitialized.value)
   })
 
-  const initialFilePath = options.fileSelection.getFileQueryValue()
+  const initialPreferredPath = options.fileSelection.getInitialPreferredPath()
   const { data: initialTreeData } = await useAsyncData(
     'editoro-tree-initial',
     () => fetchTree(options.showHiddenEntries.value)
   )
 
   if (initialTreeData.value?.items) {
-    options.treeStore.applyTreeData(initialTreeData.value.items, initialFilePath || undefined)
+    options.treeStore.applyTreeData(initialTreeData.value.items, initialPreferredPath || undefined)
   }
 }

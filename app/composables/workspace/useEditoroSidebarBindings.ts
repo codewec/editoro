@@ -29,6 +29,7 @@ export function useEditoroSidebarBindings(state: EditoroState) {
     closeSettings: state.settings.closeModal,
     changeLocale: state.settings.setLocale,
     changeColorMode: state.settings.setColorMode,
+    collapse: state.ui.collapseSidebar,
     sidebarResizeStart: state.ui.onSidebarResizeStart,
     rootDrop: state.tree.onRootDrop,
     treeDragStart: state.tree.onDragStart,

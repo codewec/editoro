@@ -10,6 +10,7 @@ export function buildUiApi(options: BuildEditoroApiOptions) {
 
   return {
     sidebarWidth: uiRefs.sidebarWidth,
+    isSidebarCollapsed: uiRefs.isSidebarCollapsed,
     minSidebarWidth: uiStore.minSidebarWidth,
     maxSidebarWidth: uiStore.maxSidebarWidth,
     createModalOpen: uiRefs.createModalOpen,
@@ -18,6 +19,9 @@ export function buildUiApi(options: BuildEditoroApiOptions) {
     renameModalOpen: uiRefs.renameModalOpen,
     renameInputName: uiRefs.renameInputName,
     deleteModalOpen: uiRefs.deleteModalOpen,
-    onSidebarResizeStart: uiStore.onSidebarResizeStart
+    onSidebarResizeStart: uiStore.onSidebarResizeStart,
+    collapseSidebar: uiStore.collapseSidebar,
+    expandSidebar: uiStore.expandSidebar,
+    toggleSidebarCollapsed: uiStore.toggleSidebarCollapsed
   }
 }

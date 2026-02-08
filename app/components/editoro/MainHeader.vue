@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import type { EditorPinnedBadge, SaveStatusColor } from '~/types/editoro'
 
+const { t } = useI18n()
+
 const props = defineProps<{
+  showExpandSidebarButton: boolean
   editorModeLabel: string
   editorModeIcon: string
   editorModeTooltip: string
@@ -14,6 +17,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
+  expandSidebar: []
   toggleMode: []
   selectBadge: [path: string]
   togglePin: [path: string]
@@ -24,6 +28,16 @@ const emit = defineEmits<{
 
 <template>
   <header class="editoro-main-header">
+    <UButton
+      v-if="props.showExpandSidebarButton"
+      size="xs"
+      color="neutral"
+      variant="soft"
+      icon="i-lucide-panel-left-open"
+      :aria-label="t('sidebar.expand')"
+      @click="emit('expandSidebar')"
+    />
+
     <EditoroHeaderModeToggle
       :label="props.editorModeLabel"
       :icon="props.editorModeIcon"

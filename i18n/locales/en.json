@@ -16,7 +16,9 @@
     "createFolder": "Create folder",
     "loadingTree": "Loading tree...",
     "moveToRoot": "Drop here to move to root",
-    "settings": "Settings"
+    "settings": "Settings",
+    "collapse": "Collapse sidebar",
+    "expand": "Expand sidebar"
   },
   "settings": {
     "title": "Settings",

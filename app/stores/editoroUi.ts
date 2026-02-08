@@ -20,10 +20,33 @@ function parseSidebarWidth(raw: string | undefined) {
   return clampSidebarWidth(parsed)
 }
 
+function parseCollapsedState(raw: unknown) {
+  if (!raw) {
+    return false
+  }
+
+  if (typeof raw === 'boolean') {
+    return raw
+  }
+
+  if (typeof raw === 'number') {
+    return raw === 1
+  }
+
+  if (typeof raw !== 'string') {
+    return false
+  }
+
+  const normalized = raw.trim().toLowerCase()
+  return normalized === '1' || normalized === 'true' || normalized === 'yes'
+}
+
 export const useEditoroUiStore = defineStore('editoro-ui', () => {
   const sidebarWidthCookie = useCookie<string>('editoro.sidebar.width', { path: '/', sameSite: 'lax' })
+  const sidebarCollapsedCookie = useCookie<string>('editoro.sidebar.collapsed', { path: '/', sameSite: 'lax' })
 
   const sidebarWidth = ref(parseSidebarWidth(sidebarWidthCookie.value))
+  const isSidebarCollapsed = ref(parseCollapsedState(sidebarCollapsedCookie.value))
   const isResizingSidebar = ref(false)
   const sidebarResizeStartX = ref(0)
   const sidebarResizeStartWidth = ref(sidebarWidth.value)
@@ -59,7 +82,7 @@ export const useEditoroUiStore = defineStore('editoro-ui', () => {
   }
 
   function onSidebarResizeStart(event: MouseEvent) {
-    if (!import.meta.client) {
+    if (!import.meta.client || isSidebarCollapsed.value) {
       return
     }
 
@@ -70,6 +93,24 @@ export const useEditoroUiStore = defineStore('editoro-ui', () => {
     document.body.style.cursor = 'col-resize'
     window.addEventListener('mousemove', onSidebarResizeMove)
     window.addEventListener('mouseup', stopSidebarResize)
+  }
+
+  function collapseSidebar() {
+    stopSidebarResize()
+    isSidebarCollapsed.value = true
+  }
+
+  function expandSidebar() {
+    isSidebarCollapsed.value = false
+  }
+
+  function toggleSidebarCollapsed() {
+    if (isSidebarCollapsed.value) {
+      expandSidebar()
+      return
+    }
+
+    collapseSidebar()
   }
 
   function openCreateModal(type: CreateTargetType) {
@@ -103,10 +144,15 @@ export const useEditoroUiStore = defineStore('editoro-ui', () => {
     sidebarWidthCookie.value = String(clampSidebarWidth(value))
   })
 
+  watch(isSidebarCollapsed, (value) => {
+    sidebarCollapsedCookie.value = value ? '1' : '0'
+  }, { immediate: true })
+
   return {
     minSidebarWidth: MIN_SIDEBAR_WIDTH,
     maxSidebarWidth: MAX_SIDEBAR_WIDTH,
     sidebarWidth,
+    isSidebarCollapsed,
     createModalOpen,
     createTargetType,
     createInputPath,
@@ -115,6 +161,9 @@ export const useEditoroUiStore = defineStore('editoro-ui', () => {
     deleteModalOpen,
     onSidebarResizeStart,
     stopSidebarResize,
+    collapseSidebar,
+    expandSidebar,
+    toggleSidebarCollapsed,
     openCreateModal,
     closeCreateModal,
     openRenameModal,

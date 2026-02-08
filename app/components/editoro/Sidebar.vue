@@ -35,6 +35,7 @@ const emit = defineEmits<{
   treeDragLeave: []
   refresh: []
   toggleHidden: []
+  collapse: []
   openSettings: []
   closeSettings: []
   changeLocale: [value: string]
@@ -77,6 +78,15 @@ const {
       </h1>
 
       <div class="editoro-actions">
+        <UButton
+          icon="i-lucide-panel-left-close"
+          size="xs"
+          color="neutral"
+          variant="soft"
+          :aria-label="t('sidebar.collapse')"
+          @click="emit('collapse')"
+        />
+
         <UButton
           icon="i-lucide-settings-2"
           size="xs"

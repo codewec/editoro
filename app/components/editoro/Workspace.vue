@@ -37,6 +37,7 @@ const {
 <template>
   <div class="editoro-layout">
     <EditoroSidebar
+      v-if="!editoro.ui.isSidebarCollapsed.value"
       v-model:selected-node="selectedNode"
       v-model:expanded-tree-paths="expandedPaths"
       v-bind="sidebarProps"
@@ -47,6 +48,7 @@ const {
       @close-settings="sidebarHandlers.closeSettings"
       @change-locale="sidebarHandlers.changeLocale"
       @change-color-mode="sidebarHandlers.changeColorMode"
+      @collapse="sidebarHandlers.collapse"
       @sidebar-resize-start="sidebarHandlers.sidebarResizeStart"
       @root-drop="sidebarHandlers.rootDrop"
       @tree-drag-start="sidebarHandlers.treeDragStart"
@@ -59,6 +61,8 @@ const {
     <main class="editoro-main">
       <EditoroMainHeader
         v-bind="mainHeaderProps"
+        :show-expand-sidebar-button="editoro.ui.isSidebarCollapsed.value"
+        @expand-sidebar="mainHeaderHandlers.expandSidebar"
         @toggle-mode="mainHeaderHandlers.toggleMode"
         @select-badge="mainHeaderHandlers.selectBadge"
         @toggle-pin="mainHeaderHandlers.togglePin"

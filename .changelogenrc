@@ -1,0 +1,13 @@
+{
+  "$schema": "https://unpkg.com/changelogen/schema/changelogen.schema.json",
+  "types": {
+    "feat": { "title": "Features" },
+    "fix": { "title": "Fixes" },
+    "refactor": { "title": "Refactoring" },
+    "perf": { "title": "Performance" },
+    "docs": { "title": "Documentation" },
+    "build": { "title": "Build System" },
+    "ci": { "title": "CI/CD" },
+    "chore": { "title": "Chores" }
+  }
+}

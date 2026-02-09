@@ -1,0 +1,11 @@
+.git
+.github
+.nuxt
+.output
+.data
+dist
+node_modules
+npm-debug.log*
+pnpm-debug.log*
+data
+README.md

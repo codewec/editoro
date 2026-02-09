@@ -1,0 +1,13 @@
+services:
+  editoro:
+    image: ghcr.io/codewec/editoro:dev
+    container_name: editoro
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NUXT_PUBLIC_SITE_URL: ${NUXT_PUBLIC_SITE_URL:-http://localhost:3000}
+      NITRO_HOST: 0.0.0.0
+      NITRO_PORT: 3000
+    volumes:
+      - ./data:/app/data

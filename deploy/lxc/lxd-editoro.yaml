@@ -1,0 +1,36 @@
+config:
+  limits.cpu: "2"
+  limits.memory: 2GiB
+  user.user-data: |
+    #cloud-config
+    package_update: true
+    package_upgrade: true
+    packages:
+      - docker.io
+      - docker-compose-plugin
+    write_files:
+      - path: /opt/editoro/docker-compose.yml
+        permissions: "0644"
+        content: |
+          services:
+            editoro:
+              image: ghcr.io/codewec/editoro:dev
+              restart: unless-stopped
+              ports:
+                - "3000:3000"
+              environment:
+                - NUXT_PUBLIC_SITE_URL=http://localhost:3000
+              volumes:
+                - /var/lib/editoro/data:/app/data
+    runcmd:
+      - mkdir -p /var/lib/editoro/data
+      - systemctl enable --now docker
+      - docker compose -f /opt/editoro/docker-compose.yml pull
+      - docker compose -f /opt/editoro/docker-compose.yml up -d
+description: Editoro LXD profile
+devices:
+  root:
+    path: /
+    pool: default
+    type: disk
+name: editoro

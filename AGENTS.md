@@ -1,93 +1,73 @@
 # AGENTS.md
 
-This document gives AI agents a practical map of the `editoro` codebase.
+This file is a practical operating guide for AI agents working on `editoro`.
 
-## 1) Project Overview
+## 1. Product Summary
 
-- Stack: `Nuxt 4`, `Nuxt UI 4`, `Pinia`, `@nuxtjs/i18n`.
-- Purpose: local markdown workspace similar to Obsidian.
-- Storage: all user files are on disk in `data/`.
-- Main UI:
-  - left: file tree with DnD, create/rename/delete.
-  - right: editor / image preview / folder browser.
-- Supported locales: `en` (default), `ru`.
+- App type: local-first markdown workspace (Obsidian-like UX).
+- Frontend stack: `Nuxt 4`, `Nuxt UI 4`, `Pinia`, `@nuxtjs/i18n`.
+- Storage: filesystem-backed content in `data/`.
+- Left panel: tree, DnD, create/rename/delete, hidden files toggle.
+- Right panel: markdown editor, image preview, folder browser.
+- Locales: `en` (default), `ru`.
 
-## 2) Key Runtime Flows
+## 2. Runtime Architecture
 
-1. App mounts `app/pages/index.vue` -> renders `EditoroWorkspace`.
-2. `useEditoro()` (`app/composables/useEditoro.ts`) returns grouped API.
-3. `useEditoroState()` composes stores + lifecycle + view model + actions.
-4. Tree and route query `?file=...` are synchronized in `useEditoroFileSelection`.
-5. Markdown content autosaves via editor persistence composable.
-6. Image uploads go to sibling `.media` folder of current markdown file.
+### Composition Root
 
-## 3) Architecture (Current)
+- `app/pages/index.vue` renders `EditoroWorkspace`.
+- `app/composables/useEditoro.ts` exposes grouped public API.
+- `app/composables/useEditoroState.ts` orchestrates stores + logic.
 
-### UI Components
+### Core Components
 
-- `app/components/editoro/Workspace.vue`: top-level layout composition.
-- `app/components/editoro/Sidebar.vue`: tree panel + settings modal.
-- `app/components/editoro/MainHeader.vue`: file/folder title + actions + save status.
-- `app/components/editoro/MainContent.vue`: folder browser / image preview / editor.
-- `app/components/editoro/Modals.vue`: create/rename/delete dialogs.
+- `app/components/editoro/Workspace.vue` - page-level layout shell.
+- `app/components/editoro/Sidebar.vue` - tree panel and sidebar controls.
+- `app/components/editoro/MainHeader.vue` - active item title, pinning, actions.
+- `app/components/editoro/MainContent.vue` - editor/browser/preview surface.
+- `app/components/editoro/Modals.vue` - create/rename/delete/settings modals.
 
 ### Stores
 
-- `app/stores/editoroTree.ts`: tree state, loading, selection, DnD.
-- `app/stores/editoroEditor.ts`: editor content, mode, save state, upload API.
-- `app/stores/editoroPreferences.ts`: locale, color mode, hidden entries.
-- `app/stores/editoroUi.ts`: modals and other UI control state.
+- `app/stores/editoroTree.ts` - tree items, selection, expansion, tree loading.
+- `app/stores/editoroEditor.ts` - editor content, view mode, save state, media upload.
+- `app/stores/editoroPreferences.ts` - locale, theme, hidden files settings.
+- `app/stores/editoroUi.ts` - modal states and workspace UI flags.
 
-### Composable Layers
+### Server Layer
 
-- `app/composables/useEditoroState.ts`: orchestration root.
-- `app/composables/useEditoroContext.ts`: internal wiring of stores/actions/view-model.
-- `app/composables/useEditoroLifecycle.ts`: SSR+mount hooks/watchers.
-- `app/composables/useEditoroFileSelection.ts`: selected node <-> route file query logic.
-- `app/composables/useEditoroEntryActions.ts`: create/rename/delete flows.
-- `app/composables/useEditoroViewModel.ts`: computed UI-facing derived data.
-- `app/composables/api/*`: builders of final public grouped API.
-- `app/composables/workspace/*Bindings.ts`: binds state to component props/events.
+- `server/utils/data-storage.ts` - path validation + filesystem operations.
+- `server/api/files/*.ts` - content/tree/create/rename/delete/move/image endpoints.
+- `app/services/files-api.ts` - client wrappers for server API.
 
-### Server
+## 3. Non-Negotiable Invariants
 
-- `server/utils/data-storage.ts`: all filesystem operations and invariants.
-- `server/api/files/*.ts`: tree/content/create/move/delete/image/media endpoints.
-- `app/services/files-api.ts`: client API wrappers for server endpoints.
+1. Keep all file operations inside `data/`.
+2. Preserve `?file=...` sync with selected file.
+3. Keep SSR/hydration stable (no client-only mismatch regressions).
+4. Preserve tree expansion/selection behavior across refresh/actions.
+5. Markdown media rules: uploads go to sibling `.media`.
+6. Markdown media rules: orphan media is removed only when truly unreferenced.
+7. Markdown media rules: empty `.media` directory should be removed.
 
-## 4) Critical Invariants (Do Not Break)
+## 4. Release and Deployment Surface
 
-1. Security/path safety:
-   - Any filesystem path must remain inside `data/`.
-   - Use existing helpers (`normalizeRelativePath`, `resolveDataPath`).
-2. Markdown editing:
-   - Only markdown files are editable/savable (`.md`).
-   - Non-markdown files show unsupported format or preview (for images).
-3. Route sync:
-   - Opened file must be reflected in `?file=...`.
-   - On refresh, restore selection if file exists; clear query if invalid.
-4. Tree UX:
-   - Preserve expanded paths on reload.
-   - Keep selected node and ancestors expanded when possible.
-5. Media handling:
-   - Uploaded images go to `<markdown-folder>/.media`.
-   - On markdown save, remove orphan media files.
-   - Remove empty `.media` directories after cleanup.
-6. SSR/hydration:
-   - Avoid client-only state mismatches that cause hydration warnings.
-   - Keep lifecycle hooks inside proper setup/composable execution flow.
+- `Dockerfile` builds and runs Nuxt production output.
+- `docker-compose.yml` runs app with `./data:/app/data`.
+- `deploy/lxc/lxd-editoro.yaml` provides LXD cloud-init profile.
+- `deploy/lxc/lxc.conf` provides classic LXC config example.
+- CI workflow: `.github/workflows/docker-publish.yml`.
+- Push to `main` publishes `ghcr.io/codewec/editoro:dev`.
+- Push tag publishes `ghcr.io/codewec/editoro:latest` and `:<tag>`.
 
-## 5) File Map for Common Tasks
+## 5. Changelog Workflow
 
-- Change tree behavior/icons: `server/utils/data-storage.ts`, `Sidebar.vue`, `app/utils/editoro-tree.ts`.
-- Change selection/query behavior: `useEditoroFileSelection.ts`, `useEditoroLifecycle.ts`.
-- Change autosave/status: `useEditoroEditorPersistence.ts`, `useEditoroEditorStatus.ts`, `MainHeader.vue`.
-- Change image upload/DnD in editor: `useEditoroMainContentMedia.ts`, `useEditoroEditorUploads.ts`, `server/api/files/image.post.ts`.
-- Change i18n/settings: `editoroPreferences.ts`, `nuxt.config.ts`, `i18n/locales/*.json`.
+- Tool: `changelogen`.
+- Config: `.changelogenrc`.
+- Commands: `pnpm changelog`, `pnpm changelog:release`.
+- Conventional commits are expected for clean release notes.
 
-## 6) Development Commands
-
-Use `pnpm` in normal environment:
+## 6. Development Commands
 
 ```bash
 pnpm install
@@ -95,43 +75,17 @@ pnpm dev
 pnpm lint
 pnpm typecheck
 pnpm build
+pnpm changelog
 ```
 
-## 7) Change Checklist for Agents
+## 7. Agent Working Rules
 
-Before coding:
-- Identify impacted layer(s): component, store, composable, server API.
-- Prefer existing abstractions over adding logic to `Workspace.vue`.
-
-While coding:
-- Keep strict TypeScript typing; avoid `any`.
-- In composables/helpers, keep comments in English.
-- Preserve existing public API shape of `useEditoro()` unless refactor requires migration everywhere.
-
-After coding:
-- Run `lint` + `typecheck`.
-- Manually verify:
-  - tree selection and expansion,
-  - route `?file=...` restore on refresh,
-  - create/rename/delete for files and folders,
-  - markdown autosave indicator behavior,
-  - image upload, preview, and orphan cleanup.
-
-## 8) Preferred Refactoring Direction
-
-- Keep `Workspace.vue` declarative (bindings only).
-- Move heavy logic from components to composables.
-- Keep stores focused:
-  - tree-only concerns in tree store/composables,
-  - editor-only concerns in editor store/composables,
-  - preferences-only concerns in preferences store.
-- Keep server filesystem logic centralized in `data-storage.ts`.
-
-## 9) Notes About Existing UX Decisions
-
-- Default locale is English.
-- Hidden entries toggle exists and hidden folders use a different folder icon.
-- Sidebar width is persisted and restored.
-- Rich/raw is handled as a toggle mode.
-- For folders, right panel shows folder contents with navigation to parent.
-
+- Prefer existing composables/stores over adding logic into large UI components.
+- Keep strict TypeScript typing, avoid `any`.
+- Keep comments in English (especially in composables/helpers).
+- For refactors, preserve existing public contracts used by `useEditoro()` and workspace bindings.
+- Validate critical flows after changes: tree open/select/expand.
+- Validate critical flows after changes: route restore on refresh.
+- Validate critical flows after changes: create/rename/delete/move.
+- Validate critical flows after changes: markdown autosave and status indicator.
+- Validate critical flows after changes: image upload/preview/cleanup.

@@ -12,7 +12,7 @@
     <img src="https://img.shields.io/github/last-commit/codewec/editoro?logo=github&color=609966&logoColor=fff" alt="Last commit"/>
     <a href="https://github.com/codewec/editoro/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-609966?logo=opensourceinitiative&logoColor=fff" alt="License MIT"/></a>
     <br/><br/>
-    <img src="https://github.com/codewec/editoro/blob/main/.github/screenshots/editoro1.png?raw=true" alt="Editoro" width="40%"/>
+    <img src="https://github.com/codewec/editoro/blob/main/.github/screenshots/editoro1.png?raw=true" alt="Editoro" width="100%"/>
 </p>
 
 ## Features

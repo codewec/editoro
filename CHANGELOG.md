@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 This file is managed with `changelogen`.
 
-## v1.1.0
+## v1.0.0
 
 
 ### 🚀 Enhancements

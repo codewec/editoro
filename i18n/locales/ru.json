@@ -57,7 +57,6 @@
     "remove": "Удалить"
   },
   "modals": {
-    "createPathHintTitle": "Как создать в корне",
     "createPathHintDescription": "Начните путь с /, например: /docs или /todo.md",
     "createPathPreviewTitle": "Будет создано по пути",
     "createDescription": "Введите имя или относительный путь",

@@ -57,7 +57,6 @@
     "remove": "Delete"
   },
   "modals": {
-    "createPathHintTitle": "How to create in root",
     "createPathHintDescription": "Start with /, for example: /docs or /todo.md",
     "createPathPreviewTitle": "Will be created at",
     "createDescription": "Enter name or relative path",

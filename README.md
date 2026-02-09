@@ -1,8 +1,19 @@
-# Editoro
-
-Editoro is a local-first markdown workspace inspired by Obsidian, built with Nuxt 4 and Nuxt UI 4.  
-It stores project files directly on disk in the `data/` directory and provides a two-panel experience:
-file tree on the left, editor/browser on the right.
+<h1 align="center">Editoro</h1>
+<p align="center">
+    <i>
+      Editoro is a local-first markdown workspace inspired by Obsidian, built with Nuxt 4 and Nuxt UI 4.  
+      It stores project files directly on disk in the `data/` directory and provides a two-panel experience:
+        file tree on the left, editor/browser on the right.
+    </i>
+    <br/><br/>
+    <img width="130" alt="Editoro" src="https://raw.githubusercontent.com/codewec/editoro/main/public/favicon.svg"/>
+    <br/> <br/>
+    <img src="https://img.shields.io/github/v/release/codewec/editoro?logo=hackthebox&color=609966&logoColor=fff" alt="Current Version"/>
+    <img src="https://img.shields.io/github/last-commit/codewec/editoro?logo=github&color=609966&logoColor=fff" alt="Last commit"/>
+    <a href="https://github.com/codewec/editoro/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-609966?logo=opensourceinitiative&logoColor=fff" alt="License MIT"/></a>
+    <br/><br/>
+    <img src="https://github.com/codewec/editoro/blob/main/.github/screenshots/editoro1.png?raw=true" alt="Editoro" width="40%"/>
+</p>
 
 ## Features
 

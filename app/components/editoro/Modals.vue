@@ -45,6 +45,7 @@ const emit = defineEmits<{
           name="path"
         >
           <UInput
+          class="w-full"
             :model-value="props.createInputPath"
             autofocus
             :placeholder="t('modals.createPathHintDescription')"
@@ -54,19 +55,11 @@ const emit = defineEmits<{
         </UFormField>
 
         <UAlert
-          color="neutral"
-          variant="soft"
-          icon="i-lucide-info"
-          :title="t('modals.createPathHintTitle')"
-          :description="t('modals.createPathHintDescription')"
-        />
-
-        <UAlert
           color="primary"
           variant="soft"
           icon="i-lucide-folder-tree"
           :title="t('modals.createPathPreviewTitle')"
-          :description="`data/${props.createPathPreview}`"
+          :description="`/${props.createPathPreview}`"
         />
       </div>
     </template>

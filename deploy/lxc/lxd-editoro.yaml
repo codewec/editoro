@@ -18,8 +18,6 @@ config:
               restart: unless-stopped
               ports:
                 - "3000:3000"
-              environment:
-                - NUXT_PUBLIC_SITE_URL=http://localhost:3000
               volumes:
                 - /var/lib/editoro/data:/app/data
     runcmd:

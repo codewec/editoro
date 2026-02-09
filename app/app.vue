@@ -1,12 +1,11 @@
 <script setup lang="ts">
-const { t } = useI18n()
-const localeHead = useLocaleHead()
+const { t, locale } = useI18n()
 
 useHead({
   meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1' }],
   link: [{ rel: 'icon', href: '/favicon.ico' }],
   htmlAttrs: {
-    lang: localeHead.value.htmlAttrs?.lang || 'en'
+    lang: locale.value
   }
 })
 

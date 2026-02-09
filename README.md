@@ -37,8 +37,7 @@ Run a prebuilt image from GHCR:
 docker run --name editoro \
   -p 3000:3000 \
   -v $(pwd)/data:/app/data \
-  -e NUXT_PUBLIC_SITE_URL=http://localhost:3000 \
-  ghcr.io/codewec/editoro:dev
+  ghcr.io/codewec/editoro:latest
 ```
 
 Then open `http://localhost:3000`.

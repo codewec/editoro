@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 This file is managed with `changelogen`.
 
+## v1.0.1
+
+[compare changes](https://github.com/codewec/editoro/compare/1.0.0...v1.0.1)
+
+### 🩹 Fixes
+
+- Remove base url ([31fcb03](https://github.com/codewec/editoro/commit/31fcb03))
+- Container user ([d4e7049](https://github.com/codewec/editoro/commit/d4e7049))
+
+### ❤️ Contributors
+
+- Codewec
+
 ## v1.0.0
 
 

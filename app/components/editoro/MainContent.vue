@@ -69,7 +69,6 @@ const richEditorHandlers = computed(() => ({
     isActive: () => false
   }
 }))
-
 </script>
 
 <template>

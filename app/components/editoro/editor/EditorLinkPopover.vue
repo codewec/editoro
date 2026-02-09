@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Editor } from '@tiptap/core'
+import type { Editor } from '@tiptap/vue-3'
 
 const props = defineProps<{
   editor: Editor
@@ -95,7 +95,10 @@ function handleKeyDown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <UPopover v-model:open="open" :ui="{ content: 'p-0.5' }">
+  <UPopover
+    v-model:open="open"
+    :ui="{ content: 'p-0.5' }"
+  >
     <UTooltip text="Link">
       <UButton
         icon="i-lucide-link"
@@ -130,7 +133,10 @@ function handleKeyDown(event: KeyboardEvent) {
             title="Apply link"
             @click="setLink"
           />
-          <USeparator orientation="vertical" class="h-6 mx-1" />
+          <USeparator
+            orientation="vertical"
+            class="h-6 mx-1"
+          />
           <UButton
             icon="i-lucide-external-link"
             color="neutral"

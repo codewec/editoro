@@ -45,7 +45,7 @@ const emit = defineEmits<{
           name="path"
         >
           <UInput
-          class="w-full"
+            class="w-full"
             :model-value="props.createInputPath"
             autofocus
             :placeholder="t('modals.createPathHintDescription')"

@@ -9,12 +9,14 @@
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
     "typecheck": "nuxt typecheck",
-    "changelog": "changelogen --output CHANGELOG.md",
-    "changelog:release": "changelogen --release --output CHANGELOG.md"
+    "changelog": "changelogen --hideAuthorEmail --output CHANGELOG.md",
+    "changelog:dry": "changelogen --dry --hideAuthorEmail --output CHANGELOG.md",
+    "release": "changelogen --release --hideAuthorEmail --output CHANGELOG.md"
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.87",
     "@pinia/nuxt": "^0.11.2",
+    "@tiptap/vue-3": "^3.17.1",
     "@nuxtjs/i18n": "^10.2.0",
     "@nuxt/ui": "^4.4.0",
     "nuxt": "^4.3.0",

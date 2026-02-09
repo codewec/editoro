@@ -34,6 +34,7 @@ export type EditorPinnedBadge = {
   key: string
   path: string
   label: string
+  icon: string
   isCurrent: boolean
   isPinned: boolean
   canPin: boolean

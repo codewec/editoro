@@ -135,6 +135,11 @@ watch(() => props.badges, async () => {
         class="editoro-file-badge"
         :class="{ 'editoro-file-badge-current': badge.isCurrent }"
       >
+        <UIcon
+          :name="badge.icon"
+          class="editoro-file-badge-leading"
+        />
+
         <button
           type="button"
           class="editoro-file-badge-label"
@@ -212,6 +217,12 @@ watch(() => props.badges, async () => {
 
 .editoro-file-badge-current {
   background: color-mix(in oklab, var(--ui-primary) 12%, transparent);
+}
+
+.editoro-file-badge-leading {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
 }
 
 .editoro-file-badge-label {

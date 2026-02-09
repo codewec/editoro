@@ -18,6 +18,28 @@ type ViewModelOptions = {
 }
 
 export function useEditoroViewModel(options: ViewModelOptions) {
+  function getBadgeIcon(path: string, node?: TreeNode) {
+    if (node?.icon) {
+      return node.icon
+    }
+
+    if (node?.type === 'directory') {
+      return 'i-lucide-folder'
+    }
+
+    const extension = getFileExtension(path)
+
+    if (extension === 'md' || extension === 'markdown') {
+      return 'i-simple-icons-markdown'
+    }
+
+    if (isImagePath(path)) {
+      return 'i-lucide-image'
+    }
+
+    return 'i-lucide-file'
+  }
+
   const selectedFolder = computed<DirectoryTreeNode | undefined>(() => {
     return options.selectedNode.value?.type === 'directory' ? options.selectedNode.value : undefined
   })
@@ -70,6 +92,7 @@ export function useEditoroViewModel(options: ViewModelOptions) {
         key: `pinned:${path}`,
         path,
         label: node?.label || getBaseName(path) || path,
+        icon: getBadgeIcon(path, node),
         isCurrent: currentPath === path,
         isPinned: true,
         canPin: true
@@ -84,6 +107,7 @@ export function useEditoroViewModel(options: ViewModelOptions) {
         label: currentNode.type === 'directory'
           ? currentNode.path
           : (currentNode.label || getBaseName(currentNode.path) || currentNode.path),
+        icon: getBadgeIcon(currentNode.path, currentNode),
         isCurrent: true,
         isPinned: false,
         canPin: true
@@ -93,6 +117,7 @@ export function useEditoroViewModel(options: ViewModelOptions) {
         key: 'root',
         path: '',
         label: options.t('main.root'),
+        icon: 'i-lucide-house',
         isCurrent: true,
         isPinned: false,
         canPin: false

@@ -22,6 +22,7 @@ export function createEditorToolbarItems(t: Translator) {
     [
       { kind: 'bulletList', icon: 'i-lucide-list', tooltip: { text: t('toolbar.bulletList') } },
       { kind: 'orderedList', icon: 'i-lucide-list-ordered', tooltip: { text: t('toolbar.orderedList') } },
+      { kind: 'taskList', icon: 'i-lucide-list-todo', tooltip: { text: t('toolbar.taskList') } },
       { kind: 'blockquote', icon: 'i-lucide-text-quote', tooltip: { text: t('toolbar.quote') } },
       { kind: 'codeBlock', icon: 'i-lucide-square-code', tooltip: { text: t('toolbar.codeBlock') } },
       { kind: 'horizontalRule', icon: 'i-lucide-minus', tooltip: { text: t('toolbar.divider') } }
@@ -47,7 +48,8 @@ export function createEditorSuggestionItems(t: Translator) {
     [
       { type: 'label', label: t('suggestion.lists') },
       { kind: 'bulletList', label: t('toolbar.bulletList'), icon: 'i-lucide-list' },
-      { kind: 'orderedList', label: t('toolbar.orderedList'), icon: 'i-lucide-list-ordered' }
+      { kind: 'orderedList', label: t('toolbar.orderedList'), icon: 'i-lucide-list-ordered' },
+      { kind: 'taskList', label: t('toolbar.taskList'), icon: 'i-lucide-list-todo' }
     ],
     [
       { type: 'label', label: t('suggestion.insert') },

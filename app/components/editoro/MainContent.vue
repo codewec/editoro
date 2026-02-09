@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { ListKeymap, TaskItem, TaskList } from '@tiptap/extension-list'
 import type { DirectoryTreeNode, EditorSuggestionItems, EditorToolbarItems, EditorViewMode, TreeNode, TreeNodeType } from '~/types/editoro'
 import { useEditoroMainContentMedia } from '~/composables/editor/useEditoroMainContentMedia'
 
@@ -69,6 +70,9 @@ const richEditorHandlers = computed(() => ({
     isActive: () => false
   }
 }))
+
+// Enable markdown task list (`- [ ]`) support in Nuxt UI editor.
+const editorExtensions = [TaskList, TaskItem, ListKeymap]
 </script>
 
 <template>
@@ -187,6 +191,7 @@ const richEditorHandlers = computed(() => ({
         :model-value="props.editorContent"
         class="editoro-editor"
         content-type="markdown"
+        :extensions="editorExtensions"
         :handlers="richEditorHandlers"
         :placeholder="t('main.editorPlaceholder')"
         @update:model-value="emit('updateEditorContent', String($event || ''))"
@@ -314,6 +319,42 @@ const richEditorHandlers = computed(() => ({
   min-height: 0;
   overflow-y: auto;
   padding-top: 1rem;
+}
+
+/* Force TaskList layout: checkbox and text must stay on the same row. */
+.editoro-editor :deep(.tiptap ul[data-type='taskList']) {
+  list-style: none;
+  padding-left: 0;
+}
+
+.editoro-editor :deep(.tiptap ul[data-type='taskList'] li),
+.editoro-editor :deep(.tiptap li[data-type='taskItem']) {
+  display: flex !important;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.editoro-editor :deep(.tiptap li[data-type='taskItem'] > label) {
+  margin: 0;
+  display: inline-flex !important;
+  align-items: center;
+  line-height: 1;
+  flex: 0 0 auto;
+}
+
+.editoro-editor :deep(.tiptap li[data-type='taskItem'] > label > input[type='checkbox']) {
+  margin: 0;
+}
+
+.editoro-editor :deep(.tiptap li[data-type='taskItem'] > div) {
+  display: block !important;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.editoro-editor :deep(.tiptap li[data-type='taskItem'] > div > p) {
+  margin: 0;
+  line-height: 1.5;
 }
 
 .editoro-raw {

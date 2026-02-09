@@ -34,8 +34,11 @@
 Run a prebuilt image from GHCR:
 
 ```bash
+PUID="$(id -u 2>/dev/null || echo 1000)"
+PGID="$(id -g 2>/dev/null || echo 1000)"
+
 docker run --name editoro \
-  --user 1000:1000 \
+  --user "${PUID}:${PGID}" \
   -p 3000:3000 \
   -v $(pwd)/data:/app/data \
   ghcr.io/codewec/editoro:latest
@@ -53,34 +56,6 @@ services:
     image: ghcr.io/codewec/editoro:latest
     container_name: editoro
     restart: unless-stopped
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./data:/app/data
-```
-
-```bash
-mkdir -p data
-docker compose up -d
-```
-
-If you need custom file ownership inside `./data`, use `.env` + full compose config:
-
-`.env`
-
-```env
-PUID=1000
-PGID=1000
-```
-
-`docker-compose.yml`
-
-```yaml
-services:
-  editoro:
-    image: ghcr.io/codewec/editoro:latest
-    container_name: editoro
-    restart: unless-stopped
     user: "${PUID:-1000}:${PGID:-1000}"
     ports:
       - "3000:3000"
@@ -90,17 +65,19 @@ services:
 
 ```bash
 mkdir -p data
+export PUID="$(id -u 2>/dev/null || echo 1000)"
+export PGID="$(id -g 2>/dev/null || echo 1000)"
 docker compose pull
 docker compose up -d
 docker compose logs -f
 ```
 
-`PUID` and `PGID` define which host user/group owns newly created files in `./data` (default `1000:1000`).
+Always set `user` in compose config. Without it, new files and folders in `./data` will be created by `root`.
 If needed, align host directory permissions before startup:
 
 ```bash
 mkdir -p data
-sudo chown -R 1000:1000 data
+sudo chown -R "$(id -u 2>/dev/null || echo 1000):$(id -g 2>/dev/null || echo 1000)" data
 ```
 
 LXD quick start (example):

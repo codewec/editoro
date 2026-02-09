@@ -18,6 +18,7 @@ type FileSelectionOptions = {
   pinnedFilePaths: Ref<string[]>
   showHiddenEntries: Ref<boolean>
   setShowHiddenEntries: (nextValue: boolean) => void
+  selectNodeByPath: (path: string) => void
   treeInitialized: Ref<boolean>
   editorStore: EditorStoreLike
   loadTree: (preferPath?: string) => Promise<void>
@@ -53,8 +54,19 @@ export function useEditoroFileSelection(options: FileSelectionOptions) {
       return false
     }
 
+    if (options.selectedNode.value?.path === path) {
+      return true
+    }
+
     if (hasHiddenPathSegment(path) && !options.showHiddenEntries.value) {
       options.setShowHiddenEntries(true)
+      await options.loadTree(path)
+      return options.selectedNode.value?.path === path
+    }
+
+    options.selectNodeByPath(path)
+    if (options.selectedNode.value?.path === path) {
+      return true
     }
 
     await options.loadTree(path)

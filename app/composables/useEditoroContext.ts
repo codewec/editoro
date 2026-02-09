@@ -45,6 +45,7 @@ export function useEditoroContext() {
     pinnedFilePaths: editorRefs.pinnedFilePaths,
     showHiddenEntries: refs.preferencesRefs.showHiddenEntries,
     setShowHiddenEntries: preferencesStore.setShowHiddenEntries,
+    selectNodeByPath: treeStore.selectNodeByPath,
     treeInitialized: treeRefs.treeInitialized,
     editorStore,
     loadTree

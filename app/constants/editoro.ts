@@ -10,7 +10,8 @@ export function createEditorToolbarItems(t: Translator) {
       { kind: 'mark', mark: 'bold', icon: 'i-lucide-bold', tooltip: { text: t('toolbar.bold') } },
       { kind: 'mark', mark: 'italic', icon: 'i-lucide-italic', tooltip: { text: t('toolbar.italic') } },
       { kind: 'mark', mark: 'strike', icon: 'i-lucide-strikethrough', tooltip: { text: t('toolbar.strike') } },
-      { kind: 'mark', mark: 'code', icon: 'i-lucide-code', tooltip: { text: t('toolbar.code') } }
+      { kind: 'mark', mark: 'code', icon: 'i-lucide-code', tooltip: { text: t('toolbar.code') } },
+      { 'kind': 'link', 'icon': 'i-lucide-link', 'slot': 'link', 'tooltip': { text: t('toolbar.link') }, 'aria-label': t('toolbar.link') }
     ],
     [
       { kind: 'heading', level: 1, label: 'H1', tooltip: { text: t('toolbar.h1') } },
@@ -26,7 +27,7 @@ export function createEditorToolbarItems(t: Translator) {
       { kind: 'horizontalRule', icon: 'i-lucide-minus', tooltip: { text: t('toolbar.divider') } }
     ],
     [
-      { kind: 'toggleRawMode', icon: 'i-lucide-file-text', label: 'Raw', tooltip: { text: t('toolbar.raw') }, 'aria-label': t('toolbar.raw') }
+      { 'kind': 'toggleRawMode', 'icon': 'i-lucide-file-text', 'label': 'Raw', 'tooltip': { text: t('toolbar.raw') }, 'aria-label': t('toolbar.raw') }
     ],
     [
       { 'kind': 'uploadImage', 'icon': 'i-lucide-image-plus', 'tooltip': { text: t('toolbar.uploadImage') }, 'aria-label': t('toolbar.uploadImage') }

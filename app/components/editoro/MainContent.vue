@@ -53,6 +53,13 @@ const {
 
 const richEditorHandlers = computed(() => ({
   ...editorHandlers,
+  // Disable prompt-based link handler; link editing is handled by custom popover UI.
+  link: {
+    canExecute: () => true,
+    execute: (editor: { chain: () => { focus: () => { run: () => boolean } } }) => editor.chain().focus(),
+    isActive: (editor: { isActive: (name: string) => boolean }) => editor.isActive('link'),
+    isDisabled: () => false
+  },
   toggleRawMode: {
     canExecute: () => true,
     execute: () => {
@@ -62,6 +69,7 @@ const richEditorHandlers = computed(() => ({
     isActive: () => false
   }
 }))
+
 </script>
 
 <template>
@@ -193,7 +201,13 @@ const richEditorHandlers = computed(() => ({
             :editor="editor"
             :items="props.editorToolbarItems"
             class="editoro-toolbar"
-          />
+          >
+            <template #link>
+              <EditoroEditorLinkPopover
+                :editor="editor"
+              />
+            </template>
+          </UEditorToolbar>
           <UEditorSuggestionMenu
             :editor="editor"
             :items="props.editorSuggestionItems"

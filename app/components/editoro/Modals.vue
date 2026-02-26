@@ -17,6 +17,10 @@ const props = defineProps<{
   deleteModalOpen: boolean
   deleteTitle: string
   selectedPath: string
+  moveProgressModalOpen: boolean
+  moveProgressValue: number
+  moveProgressStage: string
+  moveSharedAttachmentCount: number
 }>()
 
 const emit = defineEmits<{
@@ -155,6 +159,34 @@ const emit = defineEmits<{
       </div>
     </template>
   </UModal>
+
+  <UModal
+    :open="props.moveProgressModalOpen"
+    :dismissible="false"
+    :title="t('move.title')"
+    :description="t('move.description')"
+  >
+    <template #body>
+      <div class="editoro-modal-body">
+        <div class="editoro-move-stage">
+          <UIcon
+            name="i-lucide-loader-circle"
+            class="editoro-move-spinner"
+          />
+          <span>{{ props.moveProgressStage }}</span>
+        </div>
+
+        <UProgress :value="props.moveProgressValue" />
+
+        <span
+          v-if="props.moveSharedAttachmentCount > 0"
+          class="editoro-move-note"
+        >
+          {{ t('move.sharedAttachments', { count: props.moveSharedAttachmentCount }) }}
+        </span>
+      </div>
+    </template>
+  </UModal>
 </template>
 
 <style scoped>
@@ -169,5 +201,33 @@ const emit = defineEmits<{
   justify-content: flex-end;
   gap: 0.5rem;
   width: 100%;
+}
+
+.editoro-move-stage {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.editoro-move-spinner {
+  width: 1rem;
+  height: 1rem;
+  animation: editoro-spin 0.9s linear infinite;
+}
+
+.editoro-move-note {
+  color: var(--ui-text-muted);
+  font-size: 0.75rem;
+}
+
+@keyframes editoro-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>

@@ -32,7 +32,9 @@ export function useEditoroMainContentBindings(options: WorkspaceBindingOptions) 
     updateEditorContent: (value: string) => {
       state.editor.content.value = value
     },
-    selectPath: state.tree.selectNodeByPath,
+    selectPath: (path: string) => {
+      void state.actions.openPath(path)
+    },
     goParent: state.tree.goToFolderParent
   }
 

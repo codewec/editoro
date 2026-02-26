@@ -1,4 +1,13 @@
-import type { ContentResponse, CreateTargetType, FileUploadResponse, ImageUploadResponse, PathResponse, TreeResponse } from '~/types/editoro'
+import type {
+  ContentResponse,
+  CreateTargetType,
+  FileUploadResponse,
+  ImageUploadResponse,
+  MoveStartResponse,
+  MoveStatusResponse,
+  PathResponse,
+  TreeResponse
+} from '~/types/editoro'
 
 export async function fetchTree(includeHidden: boolean) {
   return await $fetch<TreeResponse>('/api/files/tree', {
@@ -27,6 +36,19 @@ export async function moveEntryApi(from: string, to: string) {
   return await $fetch<PathResponse>('/api/files/move', {
     method: 'POST',
     body: { from, to }
+  })
+}
+
+export async function startMoveEntryJobApi(from: string, to: string) {
+  return await $fetch<MoveStartResponse>('/api/files/move-start', {
+    method: 'POST',
+    body: { from, to }
+  })
+}
+
+export async function fetchMoveEntryJobStatusApi(jobId: string) {
+  return await $fetch<MoveStatusResponse>('/api/files/move-status', {
+    query: { jobId }
   })
 }
 

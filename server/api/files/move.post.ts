@@ -1,5 +1,5 @@
 import { createError, readBody } from 'h3'
-import { moveEntry } from '../../utils/data-storage'
+import { moveEntryWithMarkdownRewrite } from '../../utils/move-markdown'
 
 type MoveBody = {
   from?: string
@@ -18,6 +18,10 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const path = await moveEntry(from, to)
-  return { ok: true, path }
+  const result = await moveEntryWithMarkdownRewrite(from, to)
+  return {
+    ok: true,
+    path: result.path,
+    sharedAttachmentCount: result.sharedAttachmentCount
+  }
 })

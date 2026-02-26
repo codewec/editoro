@@ -56,3 +56,20 @@ export type FileUploadResponse = {
   path: string
   url: string
 }
+
+export type MoveStartResponse = {
+  ok: boolean
+  jobId: string
+}
+
+export type MoveJobState = 'running' | 'done' | 'error'
+
+export type MoveStatusResponse = {
+  ok: boolean
+  state: MoveJobState
+  progress: number
+  stage: string
+  path: string
+  sharedAttachmentCount: number
+  error: string
+}

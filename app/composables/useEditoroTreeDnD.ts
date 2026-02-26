@@ -4,11 +4,11 @@
  */
 import type { Ref } from 'vue'
 import type { TreeNode } from '~/types/editoro'
-import { moveEntryApi } from '~/services/files-api'
 import { buildPath, findNodeByPath, getBaseName, getParentPath } from '~/utils/editoro-path'
 
 type TreeDnDOptions = {
   treeItems: Ref<TreeNode[]>
+  moveEntry: (from: string, to: string) => Promise<string>
   loadTree: (preferPath?: string) => Promise<void>
   notifyMoveError: () => void
 }
@@ -109,8 +109,8 @@ export function useEditoroTreeDnD(options: TreeDnDOptions) {
     const targetPath = buildPath(targetDirectoryPath, getBaseName(sourceNode.path))
 
     try {
-      const result = await moveEntryApi(sourceNode.path, targetPath)
-      await options.loadTree(result.path)
+      const movedPath = await options.moveEntry(sourceNode.path, targetPath)
+      await options.loadTree(movedPath)
     } catch (error) {
       console.error(error)
       options.notifyMoveError()

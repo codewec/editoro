@@ -65,6 +65,15 @@
     "deleteIrreversible": "This action cannot be undone",
     "deleteIrreversibleDescription": "File or folder will be removed completely"
   },
+  "move": {
+    "title": "Moving entry",
+    "description": "Please wait until move is complete. The file will open after processing.",
+    "sharedAttachments": "{count} shared attachment(s) were left in their original location.",
+    "progress": {
+      "starting": "Starting move operation...",
+      "processing": "Processing..."
+    }
+  },
   "toolbar": {
     "undo": "Undo",
     "redo": "Redo",

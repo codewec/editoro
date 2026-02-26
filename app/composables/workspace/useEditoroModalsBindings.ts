@@ -18,7 +18,11 @@ export function useEditoroModalsBindings(state: EditoroState) {
     renameInputName: state.ui.renameInputName.value,
     deleteModalOpen: state.ui.deleteModalOpen.value,
     deleteTitle: state.view.deleteTitle.value,
-    selectedPath: state.view.selectedPath.value
+    selectedPath: state.view.selectedPath.value,
+    moveProgressModalOpen: state.tree.isMoveInProgress.value,
+    moveProgressValue: state.tree.moveProgressValue.value,
+    moveProgressStage: state.tree.moveProgressStage.value,
+    moveSharedAttachmentCount: state.tree.moveSharedAttachmentCount.value
   }))
 
   const modalsHandlers = {

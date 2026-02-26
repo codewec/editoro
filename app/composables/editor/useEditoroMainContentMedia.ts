@@ -1,4 +1,6 @@
 import { onBeforeUnmount, ref, watch } from 'vue'
+import { isMarkdownPath } from '~/utils/editoro-file'
+import { resolveVaultPath, toRuntimeLinkUrl } from '~/utils/editoro-vault-links'
 
 type EditorLike = {
   view?: {
@@ -34,8 +36,10 @@ type EditorHandlerLike = {
 
 type EditoroMainContentMediaOptions = {
   canUploadImage: () => boolean
+  getCurrentFilePath: () => string
   uploadImage: (file: File) => Promise<string | null>
   uploadFile: (file: File) => Promise<string | null>
+  openMarkdownPath: (path: string) => void
 }
 
 /**
@@ -265,9 +269,23 @@ export function useEditoroMainContentMedia(options: EditoroMainContentMediaOptio
       event.preventDefault()
       if (isExternalHref(href)) {
         window.open(href, '_blank', 'noopener,noreferrer')
-      } else {
-        window.location.assign(href)
+        return
       }
+
+      const currentFilePath = options.getCurrentFilePath()
+      const vaultPath = resolveVaultPath(href, currentFilePath)
+      if (vaultPath && isMarkdownPath(vaultPath)) {
+        options.openMarkdownPath(vaultPath)
+        return
+      }
+
+      const runtimeUrl = toRuntimeLinkUrl(href, currentFilePath)
+      if (isExternalHref(runtimeUrl)) {
+        window.open(runtimeUrl, '_blank', 'noopener,noreferrer')
+        return
+      }
+
+      window.location.assign(runtimeUrl)
     }
 
     const onKeyDown = (event: KeyboardEvent) => {

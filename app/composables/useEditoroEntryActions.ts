@@ -4,7 +4,7 @@
  */
 import type { ComputedRef, Ref } from 'vue'
 import type { CreateTargetType, TreeNode } from '~/types/editoro'
-import { createEntryApi, deleteEntryApi, moveEntryApi } from '~/services/files-api'
+import { createEntryApi, deleteEntryApi } from '~/services/files-api'
 import { getFileExtension, isMarkdownPath } from '~/utils/editoro-file'
 import { normalizeCreatePathInput } from '~/utils/editoro-create'
 import { buildPath, findNodeByPath, getParentPath } from '~/utils/editoro-path'
@@ -27,6 +27,7 @@ type EntryActionOptions = {
   renameInputName: Ref<string>
   selectedBaseDirectory: ComputedRef<string>
   loadTree: (preferPath?: string) => Promise<void>
+  moveEntry: (from: string, to: string) => Promise<string>
   uiActions: UiActionsLike
 }
 
@@ -110,9 +111,9 @@ export function useEditoroEntryActions(options: EntryActionOptions) {
     const targetPath = buildPath(getParentPath(node.path), nextName)
 
     try {
-      const result = await moveEntryApi(node.path, targetPath)
+      const movedPath = await options.moveEntry(node.path, targetPath)
 
-      await options.loadTree(result.path)
+      await options.loadTree(movedPath)
       options.uiActions.closeRenameModal()
       options.renameInputName.value = ''
     } catch (error) {

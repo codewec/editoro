@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { ListKeymap, TaskItem, TaskList } from '@tiptap/extension-list'
 import type { DirectoryTreeNode, EditorSuggestionItems, EditorToolbarItems, EditorViewMode, TreeNode, TreeNodeType } from '~/types/editoro'
 import { useEditoroMainContentMedia } from '~/composables/editor/useEditoroMainContentMedia'
+import { transformMarkdownLinks } from '~/utils/editoro-vault-links'
 
 const { t } = useI18n()
 
@@ -52,9 +53,28 @@ const {
   onFileInputChange
 } = useEditoroMainContentMedia({
   canUploadImage: () => props.canUploadImage,
+  getCurrentFilePath: () => props.selectedPath,
   uploadImage: props.uploadImage,
-  uploadFile: props.uploadFile
+  uploadFile: props.uploadFile,
+  openMarkdownPath: (path: string) => emit('selectPath', path)
 })
+
+const richEditorContent = computed(() => {
+  if (!props.selectedPath) {
+    return props.editorContent
+  }
+
+  return transformMarkdownLinks(props.editorContent, props.selectedPath, 'to-rich')
+})
+
+function onRichEditorContentChange(value: string) {
+  if (!props.selectedPath) {
+    emit('updateEditorContent', value)
+    return
+  }
+
+  emit('updateEditorContent', transformMarkdownLinks(value, props.selectedPath, 'to-raw'))
+}
 
 const richEditorHandlers = computed(() => ({
   ...editorHandlers,
@@ -192,13 +212,13 @@ const editorExtensions = [TaskList, TaskItem, ListKeymap]
 
       <UEditor
         v-else
-        :model-value="props.editorContent"
+        :model-value="richEditorContent"
         class="editoro-editor"
         content-type="markdown"
         :extensions="editorExtensions"
         :handlers="richEditorHandlers"
         :placeholder="t('main.editorPlaceholder')"
-        @update:model-value="emit('updateEditorContent', String($event || ''))"
+        @update:model-value="onRichEditorContentChange(String($event || ''))"
       >
         <template #default="{ editor }">
           <span
@@ -368,12 +388,16 @@ const editorExtensions = [TaskList, TaskItem, ListKeymap]
   line-height: 1.5;
 }
 
-.editoro-editor :deep(.tiptap a[href*='/api/files/file?path=']) {
+.editoro-editor :deep(.tiptap a[href^='/']:not([href^='//'])),
+.editoro-editor :deep(.tiptap a[href^='./']),
+.editoro-editor :deep(.tiptap a[href^='../']) {
   position: relative;
   padding-left: 1.1rem;
 }
 
-.editoro-editor :deep(.tiptap a[href*='/api/files/file?path=']::before) {
+.editoro-editor :deep(.tiptap a[href^='/']:not([href^='//'])::before),
+.editoro-editor :deep(.tiptap a[href^='./']::before),
+.editoro-editor :deep(.tiptap a[href^='../']::before) {
   content: '';
   position: absolute;
   left: 0;
@@ -382,6 +406,32 @@ const editorExtensions = [TaskList, TaskItem, ListKeymap]
   height: 14px;
   transform: translateY(-50%);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m21.44 11.05-8.49 8.49a5.5 5.5 0 0 1-7.78-7.78l8.49-8.48a3.5 3.5 0 1 1 4.95 4.95l-8.49 8.49a1.5 1.5 0 0 1-2.12-2.12l8.49-8.49'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 14px 14px;
+  pointer-events: none;
+}
+
+.editoro-editor :deep(.tiptap a[href^='http://']),
+.editoro-editor :deep(.tiptap a[href^='https://']),
+.editoro-editor :deep(.tiptap a[href^='mailto:']),
+.editoro-editor :deep(.tiptap a[href^='tel:']) {
+  position: relative;
+  padding-left: 1.1rem;
+}
+
+.editoro-editor :deep(.tiptap a[href^='http://']::before),
+.editoro-editor :deep(.tiptap a[href^='https://']::before),
+.editoro-editor :deep(.tiptap a[href^='mailto:']::before),
+.editoro-editor :deep(.tiptap a[href^='tel:']::before) {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translateY(-50%);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 3h6v6'/%3E%3Cpath d='M10 14 21 3'/%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 14px 14px;

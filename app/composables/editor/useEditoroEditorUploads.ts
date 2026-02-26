@@ -5,6 +5,7 @@
 import type { Ref } from 'vue'
 import type { Translator } from '~/types/editoro'
 import { uploadFileApi, uploadImageApi } from '~/services/files-api'
+import { toRelativeVaultLink } from '~/utils/editoro-vault-links'
 
 type EditoroEditorUploadsOptions = {
   t: Translator
@@ -21,7 +22,7 @@ export function useEditoroEditorUploads(options: EditoroEditorUploadsOptions) {
 
     try {
       const result = await uploadImageApi(options.activeFilePath.value, file)
-      return result.url
+      return toRelativeVaultLink(options.activeFilePath.value, result.path)
     } catch (error) {
       console.error(error)
       options.notifyError(options.t('errors.uploadImage'))
@@ -37,7 +38,7 @@ export function useEditoroEditorUploads(options: EditoroEditorUploadsOptions) {
 
     try {
       const result = await uploadFileApi(options.activeFilePath.value, file)
-      return result.url
+      return toRelativeVaultLink(options.activeFilePath.value, result.path)
     } catch (error) {
       console.error(error)
       options.notifyError(options.t('errors.uploadFile'))

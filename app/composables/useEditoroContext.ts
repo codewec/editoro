@@ -60,6 +60,7 @@ export function useEditoroContext() {
     renameInputName: uiRefs.renameInputName,
     selectedBaseDirectory: viewModel.selectedBaseDirectory,
     loadTree,
+    moveEntry: treeStore.moveEntryWithProgress,
     uiActions: {
       closeCreateModal: uiStore.closeCreateModal,
       openRenameModal: uiStore.openRenameModal,

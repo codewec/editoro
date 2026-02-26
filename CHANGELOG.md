@@ -4,6 +4,33 @@ All notable changes to this project will be documented in this file.
 
 This file is managed with `changelogen`.
 
+## v1.0.1...main
+
+[compare changes](https://github.com/codewec/editoro/compare/v1.0.1...main)
+
+### 🚀 Enhancements
+
+- **editor:** Task list ([c419761](https://github.com/codewec/editoro/commit/c419761))
+- Upload and attach files ([2d20b3d](https://github.com/codewec/editoro/commit/2d20b3d))
+- Images without api url ([add654a](https://github.com/codewec/editoro/commit/add654a))
+
+### 🩹 Fixes
+
+- Remove other media files on save ([bbfb99b](https://github.com/codewec/editoro/commit/bbfb99b))
+
+### 📖 Documentation
+
+- Run docker container ([45ee178](https://github.com/codewec/editoro/commit/45ee178))
+
+### 🏡 Chore
+
+- **release:** V1.0.1 ([d23fdd6](https://github.com/codewec/editoro/commit/d23fdd6))
+- Add local icons ([8bf8352](https://github.com/codewec/editoro/commit/8bf8352))
+
+### ❤️ Contributors
+
+- Codewec
+
 ## v1.0.1
 
 [compare changes](https://github.com/codewec/editoro/compare/1.0.0...v1.0.1)

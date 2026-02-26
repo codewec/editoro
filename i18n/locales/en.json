@@ -84,6 +84,7 @@
     "codeBlock": "Code block",
     "divider": "Divider",
     "raw": "Open raw editor",
+    "uploadFile": "Upload file",
     "uploadImage": "Upload image"
   },
   "suggestion": {
@@ -93,6 +94,7 @@
     "heading1": "Heading 1",
     "heading2": "Heading 2",
     "heading3": "Heading 3",
+    "file": "File",
     "image": "Image"
   },
   "editorMode": {
@@ -125,6 +127,7 @@
     "rename": "Failed to rename",
     "delete": "Failed to delete",
     "move": "Failed to move",
+    "uploadFile": "Failed to upload file",
     "uploadImage": "Failed to upload image",
     "openMarkdownFirst": "Open a markdown file first",
     "specifyName": "Specify a name",

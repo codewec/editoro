@@ -23,6 +23,7 @@ const props = defineProps<{
   editorSuggestionItems: EditorSuggestionItems
   canUploadImage: boolean
   uploadImage: (file: File) => Promise<string | null>
+  uploadFile: (file: File) => Promise<string | null>
 }>()
 
 const emit = defineEmits<{
@@ -44,12 +45,15 @@ const isMarkdownFileSelected = computed(() => {
 
 const {
   imageInputRef,
+  fileInputRef,
   editorHandlers,
   bindEditor,
-  onImageInputChange
+  onImageInputChange,
+  onFileInputChange
 } = useEditoroMainContentMedia({
   canUploadImage: () => props.canUploadImage,
-  uploadImage: props.uploadImage
+  uploadImage: props.uploadImage,
+  uploadFile: props.uploadFile
 })
 
 const richEditorHandlers = computed(() => ({
@@ -238,6 +242,13 @@ const editorExtensions = [TaskList, TaskItem, ListKeymap]
       class="editoro-file-input"
       @change="onImageInputChange"
     >
+
+    <input
+      ref="fileInputRef"
+      type="file"
+      class="editoro-file-input"
+      @change="onFileInputChange"
+    >
   </div>
 </template>
 
@@ -355,6 +366,30 @@ const editorExtensions = [TaskList, TaskItem, ListKeymap]
 .editoro-editor :deep(.tiptap li[data-type='taskItem'] > div > p) {
   margin: 0;
   line-height: 1.5;
+}
+
+.editoro-editor :deep(.tiptap a[href*='/api/files/file?path=']) {
+  position: relative;
+  padding-left: 1.1rem;
+}
+
+.editoro-editor :deep(.tiptap a[href*='/api/files/file?path=']::before) {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translateY(-50%);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m21.44 11.05-8.49 8.49a5.5 5.5 0 0 1-7.78-7.78l8.49-8.48a3.5 3.5 0 1 1 4.95 4.95l-8.49 8.49a1.5 1.5 0 0 1-2.12-2.12l8.49-8.49'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 14px 14px;
+  pointer-events: none;
+}
+
+.editoro-editor :deep(.editoro-link-modifier a[href]) {
+  cursor: pointer;
 }
 
 .editoro-raw {

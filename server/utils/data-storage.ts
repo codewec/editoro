@@ -32,6 +32,19 @@ const IMAGE_CONTENT_TYPES: Record<string, string> = {
   '.ico': 'image/x-icon'
 }
 
+const FILE_CONTENT_TYPES: Record<string, string> = {
+  ...IMAGE_CONTENT_TYPES,
+  '.pdf': 'application/pdf',
+  '.txt': 'text/plain; charset=utf-8',
+  '.md': 'text/markdown; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
+  '.csv': 'text/csv; charset=utf-8',
+  '.zip': 'application/zip',
+  '.7z': 'application/x-7z-compressed',
+  '.tar': 'application/x-tar',
+  '.gz': 'application/gzip'
+}
+
 function isInsideDataDir(path: string) {
   return path === DATA_DIR || path.startsWith(`${DATA_DIR}${sep}`)
 }
@@ -334,6 +347,11 @@ function getMediaDirectoryForFile(markdownPath: string) {
   return parent === '.' ? '.media' : `${parent}/.media`
 }
 
+function getFilesDirectoryForFile(markdownPath: string) {
+  const parent = posix.dirname(markdownPath)
+  return parent === '.' ? '.files' : `${parent}/.files`
+}
+
 function isMediaFileReferencedInContent(markdownPath: string, mediaFilePath: string, content: string) {
   const markdownDir = posix.dirname(markdownPath)
   const relativePath = markdownDir === '.'
@@ -525,6 +543,44 @@ export async function saveImageForMarkdownFile(
   return relativePath
 }
 
+export async function saveAttachmentForMarkdownFile(
+  markdownPath: string,
+  sourceFileName: string,
+  data: Uint8Array
+) {
+  const { normalized, fullPath } = resolveDataPath(markdownPath)
+
+  if (!normalized.toLowerCase().endsWith('.md')) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Файл можно загрузить только для markdown документа'
+    })
+  }
+
+  const markdownStats = await stat(fullPath)
+  if (!markdownStats.isFile()) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Путь markdown файла не найден'
+    })
+  }
+
+  const safeName = sanitizeFileName(sourceFileName)
+  const extension = posix.extname(safeName)
+  const baseName = extension
+    ? safeName.slice(0, -extension.length) || 'file'
+    : (safeName || 'file')
+  const fileName = `${baseName}${extension}`
+  const filesDir = getFilesDirectoryForFile(normalized)
+  const relativePath = await ensureUniquePath(`${filesDir}/${fileName}`)
+  const { fullPath: targetPath } = resolveDataPath(relativePath)
+
+  await mkdir(dirname(targetPath), { recursive: true })
+  await writeFile(targetPath, data)
+
+  return relativePath
+}
+
 export async function getMediaFile(relativePath: string) {
   const { normalized, fullPath } = resolveDataPath(relativePath)
   const extension = posix.extname(normalized).toLowerCase()
@@ -547,4 +603,25 @@ export async function getMediaFile(relativePath: string) {
 
   const data = await readFile(fullPath)
   return { data, contentType }
+}
+
+export async function getStoredFile(relativePath: string) {
+  const { normalized, fullPath } = resolveDataPath(relativePath)
+  const extension = posix.extname(normalized).toLowerCase()
+  const contentType = FILE_CONTENT_TYPES[extension] || 'application/octet-stream'
+
+  const metadata = await stat(fullPath)
+  if (!metadata.isFile()) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'Файл не найден'
+    })
+  }
+
+  const data = await readFile(fullPath)
+  return {
+    data,
+    contentType,
+    fileName: posix.basename(normalized)
+  }
 }

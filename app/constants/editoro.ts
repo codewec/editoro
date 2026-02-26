@@ -31,6 +31,7 @@ export function createEditorToolbarItems(t: Translator) {
       { 'kind': 'toggleRawMode', 'icon': 'i-lucide-file-text', 'label': 'Raw', 'tooltip': { text: t('toolbar.raw') }, 'aria-label': t('toolbar.raw') }
     ],
     [
+      { 'kind': 'uploadFile', 'icon': 'i-lucide-paperclip', 'tooltip': { text: t('toolbar.uploadFile') }, 'aria-label': t('toolbar.uploadFile') },
       { 'kind': 'uploadImage', 'icon': 'i-lucide-image-plus', 'tooltip': { text: t('toolbar.uploadImage') }, 'aria-label': t('toolbar.uploadImage') }
     ]
   ] satisfies EditorToolbarItems
@@ -53,6 +54,7 @@ export function createEditorSuggestionItems(t: Translator) {
     ],
     [
       { type: 'label', label: t('suggestion.insert') },
+      { kind: 'uploadFile', label: t('suggestion.file'), icon: 'i-lucide-paperclip' },
       { kind: 'uploadImage', label: t('suggestion.image'), icon: 'i-lucide-image-plus' },
       { kind: 'blockquote', label: t('toolbar.quote'), icon: 'i-lucide-text-quote' },
       { kind: 'codeBlock', label: t('toolbar.codeBlock'), icon: 'i-lucide-square-code' },

@@ -51,3 +51,8 @@ export type ImageUploadResponse = {
   path: string
   url: string
 }
+
+export type FileUploadResponse = {
+  path: string
+  url: string
+}

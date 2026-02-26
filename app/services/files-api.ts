@@ -1,4 +1,4 @@
-import type { ContentResponse, CreateTargetType, ImageUploadResponse, PathResponse, TreeResponse } from '~/types/editoro'
+import type { ContentResponse, CreateTargetType, FileUploadResponse, ImageUploadResponse, PathResponse, TreeResponse } from '~/types/editoro'
 
 export async function fetchTree(includeHidden: boolean) {
   return await $fetch<TreeResponse>('/api/files/tree', {
@@ -40,6 +40,17 @@ export async function uploadImageApi(path: string, file: File) {
   formData.set('file', file)
 
   return await $fetch<ImageUploadResponse>('/api/files/image', {
+    method: 'POST',
+    body: formData
+  })
+}
+
+export async function uploadFileApi(path: string, file: File) {
+  const formData = new FormData()
+  formData.set('path', path)
+  formData.set('file', file)
+
+  return await $fetch<FileUploadResponse>('/api/files/file', {
     method: 'POST',
     body: formData
   })

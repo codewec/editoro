@@ -82,6 +82,7 @@ export const useEditoroEditorStore = defineStore('editoro-editor', () => {
     loadFile: persistence.loadFile,
     setContent,
     uploadImage: uploads.uploadImage,
+    uploadFile: uploads.uploadFile,
     clearPendingSave: persistence.clearPendingSave,
     isPinned: pins.isPinned,
     pinFile: pins.pinFile,

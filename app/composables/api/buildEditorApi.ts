@@ -22,6 +22,7 @@ export function buildEditorApi(options: BuildEditoroApiOptions) {
     modeTooltip: editorRefs.editorModeTooltip,
     pinnedFilePaths: editorRefs.pinnedFilePaths,
     uploadImage: editorStore.uploadImage,
+    uploadFile: editorStore.uploadFile,
     toggleMode: editorStore.toggleEditorMode,
     isPinned: editorStore.isPinned,
     pinFile: editorStore.pinFile,

@@ -22,6 +22,7 @@ export function useEditoroMainContentBindings(options: WorkspaceBindingOptions) 
     editorContent: state.editor.content.value,
     canUploadImage: !!state.editor.activeFilePath.value,
     uploadImage: state.editor.uploadImage,
+    uploadFile: state.editor.uploadFile,
     editorToolbarItems: options.editorToolbarItems.value,
     editorSuggestionItems: options.editorSuggestionItems.value
   }))

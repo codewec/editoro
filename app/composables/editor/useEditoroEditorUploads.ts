@@ -4,7 +4,7 @@
  */
 import type { Ref } from 'vue'
 import type { Translator } from '~/types/editoro'
-import { uploadImageApi } from '~/services/files-api'
+import { uploadFileApi, uploadImageApi } from '~/services/files-api'
 
 type EditoroEditorUploadsOptions = {
   t: Translator
@@ -29,7 +29,24 @@ export function useEditoroEditorUploads(options: EditoroEditorUploadsOptions) {
     }
   }
 
+  async function uploadFile(file: File) {
+    if (!options.activeFilePath.value) {
+      options.notifyError(options.t('errors.openMarkdownFirst'))
+      return null
+    }
+
+    try {
+      const result = await uploadFileApi(options.activeFilePath.value, file)
+      return result.url
+    } catch (error) {
+      console.error(error)
+      options.notifyError(options.t('errors.uploadFile'))
+      return null
+    }
+  }
+
   return {
-    uploadImage
+    uploadImage,
+    uploadFile
   }
 }

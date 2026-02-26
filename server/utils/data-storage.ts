@@ -372,6 +372,25 @@ async function listFilesRecursive(relativeDir: string) {
   return files
 }
 
+async function listMarkdownFilesInSameDirectory(markdownPath: string) {
+  const directory = posix.dirname(markdownPath)
+  const relativeDir = directory === '.' ? '' : directory
+  const { fullPath } = resolveDataPath(relativeDir)
+  const entries = await readdir(fullPath, { withFileTypes: true })
+
+  return entries
+    .filter(entry => entry.isFile())
+    .map((entry) => {
+      const filePath = relativeDir ? `${relativeDir}/${entry.name}` : entry.name
+      return {
+        filePath,
+        extension: posix.extname(entry.name).toLowerCase()
+      }
+    })
+    .filter(entry => entry.extension === '.md' || entry.extension === '.markdown')
+    .map(entry => entry.filePath)
+}
+
 async function removeEmptyDirectoriesRecursive(relativeDir: string) {
   const { fullPath } = resolveDataPath(relativeDir)
   const entries = await readdir(fullPath, { withFileTypes: true })
@@ -398,10 +417,38 @@ async function cleanupOrphanMediaForMarkdown(markdownPath: string, content: stri
     return
   }
 
+  // Build a complete reference set from all markdown files in the same directory.
+  // This prevents deleting shared media when one file is saved after switching
+  // from another file that still references images in the same `.media` folder.
+  const markdownFiles = await listMarkdownFilesInSameDirectory(markdownPath)
+  const allMarkdownFiles = markdownFiles.includes(markdownPath)
+    ? markdownFiles
+    : [...markdownFiles, markdownPath]
+
+  const markdownContents = new Map<string, string>()
+  for (const filePath of allMarkdownFiles) {
+    if (filePath === markdownPath) {
+      // Use the newest editor content for the currently saved file.
+      markdownContents.set(filePath, content)
+      continue
+    }
+
+    const { fullPath: markdownFullPath } = resolveDataPath(filePath)
+    try {
+      markdownContents.set(filePath, await readFile(markdownFullPath, 'utf8'))
+    } catch {
+      // Ignore transient read errors while cleaning up.
+    }
+  }
+
   const existingFiles = await listFilesRecursive(mediaDir)
 
   for (const filePath of existingFiles) {
-    if (!isMediaFileReferencedInContent(markdownPath, filePath, content)) {
+    const isReferenced = Array.from(markdownContents.entries()).some(([markdownFilePath, markdownContent]) => {
+      return isMediaFileReferencedInContent(markdownFilePath, filePath, markdownContent)
+    })
+
+    if (!isReferenced) {
       const { fullPath } = resolveDataPath(filePath)
       await rm(fullPath, { force: true })
     }
